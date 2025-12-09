@@ -1,6 +1,6 @@
 'use client';
 
-import type { Column, DeviceSize } from '@/lib/types';
+import type { Column, DeviceSize, Row } from '@/lib/types';
 import {
   Card,
   CardContent,
@@ -16,18 +16,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Slider } from '@/components/ui/slider';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Laptop, Smartphone, Tablet, Trash2 } from 'lucide-react';
+import { Trash2, HelpCircle, ChevronDown } from 'lucide-react';
 import { Button } from '../ui/button';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '../ui/accordion';
+import { Switch } from '../ui/switch';
 
 interface ColumnSettingsProps {
   column: Column;
   onUpdate: (column: Column) => void;
   onDelete: (columnId: string) => void;
+  row: Row;
+  onUpdateRow: (rowId: string, updatedProps: Partial<Row>) => void;
 }
-
-const sizeOptions = Array.from({ length: 12 }, (_, i) => i + 1);
 
 const paddingOptions = [
     { value: 'slds-p-around_small', label: 'Small Around'},
@@ -38,106 +43,127 @@ const paddingOptions = [
     { value: 'slds-m-around_small', label: 'Small Margin'},
 ]
 
+const sizeOptions = Array.from({ length: 12 }, (_, i) => i + 1);
+
 export function ColumnSettings({
   column,
   onUpdate,
   onDelete,
+  row,
+  onUpdateRow,
 }: ColumnSettingsProps) {
-  const handleSizeChange = (device: DeviceSize, value: number) => {
-    onUpdate({ ...column, [device]: value });
+  const handleSizeChange = (device: DeviceSize, value: string) => {
+    onUpdate({ ...column, [device]: parseInt(value, 10) });
   };
 
   const handlePaddingChange = (value: string) => {
     onUpdate({ ...column, padding: value });
   };
+  
+  const handleDeviceSpecificChange = (checked: boolean) => {
+    onUpdate({ ...column, deviceSpecific: checked });
+  };
+
+  const columnIndex = row.columns.findIndex(c => c.id === column.id);
+
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex justify-between items-start">
-          <div>
-            <CardTitle className="font-headline">Column Settings</CardTitle>
-            <CardDescription>Adjust selected column.</CardDescription>
-          </div>
-          <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive" onClick={() => onDelete(column.id)}>
-            <Trash2 className="h-4 w-4" />
-            <span className="sr-only">Delete column</span>
-          </Button>
+    <div className="w-full">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+            <h3 className="font-semibold text-lg">Column type</h3>
         </div>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        <div className="space-y-2">
-          <Label>Padding</Label>
-          <Select value={column.padding} onValueChange={handlePaddingChange}>
+        <div className="flex items-center gap-2">
+            <h3 className="font-semibold text-lg">Padding</h3>
+            <HelpCircle className="h-4 w-4 text-muted-foreground" />
+        </div>
+      </div>
+      <div className="flex items-center justify-between mb-6 gap-4">
+        <Select value={column.type} onValueChange={(v) => onUpdate({...column, type: v})}>
             <SelectTrigger>
-              <SelectValue placeholder="Select padding" />
+              <SelectValue placeholder="Select type" />
             </SelectTrigger>
             <SelectContent>
-                {paddingOptions.map(option => (
-                    <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
-                ))}
+                <SelectItem value="Default">Fixed</SelectItem>
             </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-2">
-          <Label>Responsive Sizing</Label>
-          <Tabs defaultValue="large" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="small">
-                <Smartphone className="h-4 w-4 mr-2" /> Small
-              </TabsTrigger>
-              <TabsTrigger value="medium">
-                <Tablet className="h-4 w-4 mr-2" /> Medium
-              </TabsTrigger>
-              <TabsTrigger value="large">
-                <Laptop className="h-4 w-4 mr-2" /> Large
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="small" className="pt-4">
-              <SizeSlider
-                label="Mobile Size"
-                value={column.sizeSmall}
-                onChange={(v) => handleSizeChange('sizeSmall', v)}
-              />
-            </TabsContent>
-            <TabsContent value="medium" className="pt-4">
-              <SizeSlider
-                label="Tablet Size"
-                value={column.sizeMedium}
-                onChange={(v) => handleSizeChange('sizeMedium', v)}
-              />
-            </TabsContent>
-            <TabsContent value="large" className="pt-4">
-              <SizeSlider
-                label="Desktop Size"
-                value={column.size}
-                onChange={(v) => handleSizeChange('size', v)}
-              />
-            </TabsContent>
-          </Tabs>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-
-function SizeSlider({ label, value, onChange }: { label: string, value: number, onChange: (value: number) => void}) {
-  return (
-    <div className="space-y-3">
-      <div className="flex justify-between items-center">
-        <Label className="text-sm">{label}</Label>
-        <span className="text-sm font-medium w-12 text-center rounded-md bg-primary/10 text-primary py-0.5">
-          {value} / 12
-        </span>
+        </Select>
+        <Select value={column.padding} onValueChange={handlePaddingChange}>
+          <SelectTrigger>
+            <SelectValue placeholder="Select padding" />
+          </SelectTrigger>
+          <SelectContent>
+              {paddingOptions.map(option => (
+                  <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+              ))}
+          </SelectContent>
+        </Select>
       </div>
-      <Slider
-        value={[value]}
-        onValueChange={([v]) => onChange(v)}
-        min={1}
-        max={12}
-        step={1}
-      />
+
+      <Accordion type="single" collapsible defaultValue="column-0" className="w-full">
+        <AccordionItem value={`column-${columnIndex}`}>
+          <AccordionTrigger className="font-bold text-lg w-full justify-between">
+            <div className="flex items-center">
+              Column {columnIndex + 1}
+            </div>
+          </AccordionTrigger>
+          <AccordionContent className="pt-4 space-y-4">
+            <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                    <Label htmlFor={`size-${column.id}`}>Size</Label>
+                    <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                </div>
+                <Select value={String(column.size)} onValueChange={(v) => handleSizeChange('size', v)}>
+                    <SelectTrigger id={`size-${column.id}`}>
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {sizeOptions.map(s => <SelectItem key={s} value={String(s)}>{s}</SelectItem>)}
+                    </SelectContent>
+                </Select>
+            </div>
+            <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                    <Label>Device Specific</Label>
+                </div>
+                <Switch
+                    checked={column.deviceSpecific}
+                    onCheckedChange={handleDeviceSpecificChange}
+                />
+            </div>
+
+            {column.deviceSpecific && (
+                 <div className="space-y-4 pt-2 border-t mt-4">
+                    <div className="space-y-2 pt-4">
+                        <Label>Small Device Size (Mobile)</Label>
+                        <Select value={String(column.sizeSmall)} onValueChange={(v) => handleSizeChange('sizeSmall', v)}>
+                            <SelectTrigger>
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {sizeOptions.map(s => <SelectItem key={s} value={String(s)}>{s}</SelectItem>)}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div className="space-y-2">
+                        <Label>Medium Device Size (Tablet)</Label>
+                        <Select value={String(column.sizeMedium)} onValueChange={(v) => handleSizeChange('sizeMedium', v)}>
+                            <SelectTrigger>
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {sizeOptions.map(s => <SelectItem key={s} value={String(s)}>{s}</SelectItem>)}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </div>
+            )}
+             <Button variant="outline" size="sm" className="w-full text-destructive hover:text-destructive mt-4" onClick={() => onDelete(column.id)}>
+                <Trash2 className="h-4 w-4 mr-2" />
+                Delete Column
+            </Button>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </div>
   );
 }

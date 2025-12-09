@@ -5,6 +5,7 @@ export interface Column {
   sizeMedium: number;
   padding: string;
   type: string;
+  deviceSpecific: boolean;
 }
 
 export type DeviceSize = 'size' | 'sizeSmall' | 'sizeMedium';
