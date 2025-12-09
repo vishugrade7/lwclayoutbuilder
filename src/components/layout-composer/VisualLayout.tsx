@@ -98,12 +98,12 @@ export function VisualLayout({
 
                     if (row.flexibility === 'default') {
                         if (row.multipleRows) {
-                            style.flexBasis = `calc(${widthPercentage}% - ${widthPercentage === 100 ? '0px' : '0.75rem'})`;
+                            style.flexBasis = `calc(${widthPercentage}% - (${widthPercentage === 100 ? '0px' : '0.75rem'} * (12 - ${col.size}) / 12))`;
                             style.flexGrow = 0;
                             style.flexShrink = 0;
-                            style.maxWidth = `${widthPercentage}%`;
+                            style.width = `${widthPercentage}%`;
                         } else {
-                            style.flex = `0 1 ${widthPercentage}%`;
+                             style.flex = `0 1 ${widthPercentage}%`;
                         }
                     } else {
                         style.flexGrow = 1;
