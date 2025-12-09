@@ -56,22 +56,21 @@ const DEFAULT_LAYOUT: Row[] = [
 
 const paddingOptions = [
   { value: 'none', label: 'Default' },
-  { value: 'horizontal-small', label: 'horizontal-small'},
-  { value: 'horizontal-medium', label: 'horizontal-medium'},
-  { value: 'horizontal-large', label: 'horizontal-large'},
-  { value: 'around-small', label: 'around-small'},
-  { value: 'around-medium', label: 'around-medium'},
-  { value: 'around-large', label: 'around-large'},
-  { value: 'vertical-small', label: 'vertical-small'},
-  { value: 'vertical-medium', label: 'vertical-medium'},
-  { value: 'vertical-large', label: 'vertical-large'},
+  { value: 'horizontal_small', label: 'horizontal-small'},
+  { value: 'horizontal_medium', label: 'horizontal-medium'},
+  { value: 'horizontal_large', label: 'horizontal-large'},
+  { value: 'around_small', label: 'around-small'},
+  { value: 'around_medium', label: 'around-medium'},
+  { value: 'around_large', label: 'around-large'},
+  { value: 'vertical_small', label: 'vertical-small'},
+  { value: 'vertical_medium', label: 'vertical-medium'},
+  { value: 'vertical_large', label: 'vertical-large'},
 ]
 
 const columnTypeOptions = [
-  { value: 'fixed', label: 'Fixed' },
-  { value: 'auto', label: 'Auto' },
-  { value: 'grow', label: 'Grow' },
-]
+    { value: 'fixed', label: 'Fixed' },
+    { value: 'fluid', label: 'Fluid' },
+];
 
 
 export function LayoutComposerPage() {
@@ -81,6 +80,7 @@ export function LayoutComposerPage() {
   );
   const [isCodeDialogOpen, setCodeDialogOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const [previewDevice, setPreviewDevice] = useState<"desktop" | "tablet" | "mobile">("desktop");
   
   const baseId = useId();
 
@@ -184,21 +184,25 @@ export function LayoutComposerPage() {
 
   return (
     <div className="flex h-screen flex-col bg-background font-body text-foreground">
-       <header className="px-6 py-3 bg-background/80 border-b backdrop-blur-sm sticky top-0 z-10 flex items-center justify-between">
-        <div className="flex items-center gap-4">
+       <header className="px-4 sm:px-6 py-3 bg-background/80 border-b backdrop-blur-sm sticky top-0 z-10 flex flex-col md:flex-row items-center gap-4">
+        <div className="flex items-center justify-between w-full md:w-auto">
           <h1 className="text-xl font-bold font-headline text-foreground whitespace-nowrap">Layout Composer</h1>
-          <ThemeSwitcher/>
+          <div className='flex items-center gap-4'>
+            <ThemeSwitcher/>
+          </div>
         </div>
-        {activeRow && (
-          <RowSettings 
-            row={activeRow} 
-            onUpdate={handleUpdateRow}
-          />
-        )}
+        <div className='w-full'>
+          {activeRow && (
+            <RowSettings 
+              row={activeRow} 
+              onUpdate={handleUpdateRow}
+            />
+          )}
+        </div>
       </header>
       
-      <main className="flex-grow grid grid-cols-12 gap-0 overflow-hidden">
-        <div className="col-span-3 bg-card/50 p-4 border-r overflow-y-auto">
+      <main className="flex-grow grid grid-cols-1 lg:grid-cols-12 gap-0 overflow-hidden">
+        <div className="col-span-12 lg:col-span-3 bg-card/50 p-4 border-r overflow-y-auto">
            <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-bold">Column Config</h2>
               <Button variant="secondary" size="sm" onClick={() => activeRow && handleAddColumn(activeRow.id)} className="rounded-full">
@@ -261,8 +265,8 @@ export function LayoutComposerPage() {
             </div>
         </div>
 
-        <div className="col-span-9 p-6 flex flex-col bg-background/50">
-          <div className="flex justify-between items-center mb-4">
+        <div className="col-span-12 lg:col-span-9 p-6 flex flex-col bg-background/50">
+          <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-4 gap-4">
             <h2 className="text-lg font-bold">Visual Layout</h2>
             <div className="flex items-center gap-4">
               <Button size="sm" onClick={handleAddRow} className="rounded-full">
@@ -280,6 +284,8 @@ export function LayoutComposerPage() {
               onSelectColumn={setSelectedColumnId}
               selectedColumnId={selectedColumnId}
               isLoading={isPending}
+              previewDevice={previewDevice}
+              onSetPreviewDevice={setPreviewDevice}
             />
           </div>
         </div>
