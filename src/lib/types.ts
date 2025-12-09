@@ -6,6 +6,7 @@ export interface Column {
   padding: string;
   type: string;
   deviceSpecific: boolean;
+  flexibility: 'default' | 'auto' | 'shrink' | 'no-shrink' | 'grow' | 'no-grow' | 'no-flex';
 }
 
 export type DeviceSize = 'size' | 'sizeSmall' | 'sizeMedium';

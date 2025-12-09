@@ -8,4 +8,5 @@ export const createNewColumn = (id: string): Column => ({
   padding: 'slds-p-around_small',
   type: 'Default',
   deviceSpecific: false,
+  flexibility: 'default',
 });

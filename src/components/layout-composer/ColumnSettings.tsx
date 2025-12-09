@@ -43,6 +43,16 @@ const paddingOptions = [
     { value: 'slds-m-around_small', label: 'Small Margin'},
 ]
 
+const flexibilityOptions = [
+    { value: 'default', label: 'Default' },
+    { value: 'auto', label: 'auto' },
+    { value: 'shrink', label: 'shrink' },
+    { value: 'no-shrink', label: 'no-shrink' },
+    { value: 'grow', label: 'grow' },
+    { value: 'no-grow', label: 'no-grow' },
+    { value: 'no-flex', label: 'no-flex' },
+]
+
 const sizeOptions = Array.from({ length: 12 }, (_, i) => i + 1);
 
 export function ColumnSettings({
@@ -64,41 +74,15 @@ export function ColumnSettings({
     onUpdate({ ...column, deviceSpecific: checked });
   };
 
+  const handleFlexibilityChange = (value: string) => {
+    onUpdate({ ...column, flexibility: value as Column['flexibility'] });
+  };
+
   const columnIndex = row.columns.findIndex(c => c.id === column.id);
 
 
   return (
     <div className="w-full">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-            <h3 className="font-semibold text-lg">Column type</h3>
-        </div>
-        <div className="flex items-center gap-2">
-            <h3 className="font-semibold text-lg">Padding</h3>
-            <HelpCircle className="h-4 w-4 text-muted-foreground" />
-        </div>
-      </div>
-      <div className="flex items-center justify-between mb-6 gap-4">
-        <Select value={column.type} onValueChange={(v) => onUpdate({...column, type: v})}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select type" />
-            </SelectTrigger>
-            <SelectContent>
-                <SelectItem value="Default">Fixed</SelectItem>
-            </SelectContent>
-        </Select>
-        <Select value={column.padding} onValueChange={handlePaddingChange}>
-          <SelectTrigger>
-            <SelectValue placeholder="Select padding" />
-          </SelectTrigger>
-          <SelectContent>
-              {paddingOptions.map(option => (
-                  <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
-              ))}
-          </SelectContent>
-        </Select>
-      </div>
-
       <Accordion type="single" collapsible defaultValue="column-0" className="w-full">
         <AccordionItem value={`column-${columnIndex}`}>
           <AccordionTrigger className="font-bold text-lg w-full justify-between">
@@ -107,20 +91,51 @@ export function ColumnSettings({
             </div>
           </AccordionTrigger>
           <AccordionContent className="pt-4 space-y-4">
-            <div className="space-y-2">
-                <div className="flex justify-between items-center">
-                    <Label htmlFor={`size-${column.id}`}>Size</Label>
-                    <HelpCircle className="h-4 w-4 text-muted-foreground" />
+            <div className="flex items-center justify-between mb-2 gap-4">
+                <div className="w-1/2">
+                    <Label className="flex items-center gap-1 mb-2">Flexibility <HelpCircle className="h-4 w-4 text-muted-foreground" /></Label>
+                    <Select value={column.flexibility} onValueChange={handleFlexibilityChange}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {flexibilityOptions.map(option => (
+                                <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
                 </div>
-                <Select value={String(column.size)} onValueChange={(v) => handleSizeChange('size', v)}>
-                    <SelectTrigger id={`size-${column.id}`}>
-                        <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {sizeOptions.map(s => <SelectItem key={s} value={String(s)}>{s}</SelectItem>)}
-                    </SelectContent>
-                </Select>
+                <div className="w-1/2">
+                    <Label className="flex items-center gap-1 mb-2">Padding <HelpCircle className="h-4 w-4 text-muted-foreground" /></Label>
+                    <Select value={column.padding} onValueChange={handlePaddingChange}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select padding" />
+                      </SelectTrigger>
+                      <SelectContent>
+                          {paddingOptions.map(option => (
+                              <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                          ))}
+                      </SelectContent>
+                    </Select>
+                </div>
             </div>
+
+            {column.flexibility === 'default' && (
+                <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                        <Label htmlFor={`size-${column.id}`}>Size</Label>
+                        <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                    <Select value={String(column.size)} onValueChange={(v) => handleSizeChange('size', v)}>
+                        <SelectTrigger id={`size-${column.id}`}>
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {sizeOptions.map(s => <SelectItem key={s} value={String(s)}>{s}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
+                </div>
+            )}
             <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
                     <Label>Device Specific</Label>

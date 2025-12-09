@@ -39,7 +39,8 @@ ${row.columns.map(col => {
     const colClasses = [
         'slds-col',
         col.padding,
-        `slds-size_${col.size}-of-12`,
+        col.flexibility !== 'default' ? `slds-${col.flexibility}` : '',
+        col.flexibility === 'default' ? `slds-size_${col.size}-of-12` : '',
         col.deviceSpecific ? `slds-medium-size_${col.sizeMedium}-of-12` : '',
         col.deviceSpecific ? `slds-small-size_${col.sizeSmall}-of-12` : ''
     ].filter(Boolean).join(' ');
