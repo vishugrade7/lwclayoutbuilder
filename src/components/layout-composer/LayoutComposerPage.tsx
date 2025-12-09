@@ -10,6 +10,7 @@ import { Card, CardContent } from '../ui/card';
 import { Button } from '../ui/button';
 import { Plus, Code } from 'lucide-react';
 import { CodeGenerationDialog } from './CodeGenerationDialog';
+import { Separator } from '@/components/ui/separator';
 
 const createNewRow = (id: string): Row => ({
   id: `row-${id}`,
@@ -117,7 +118,6 @@ export function LayoutComposerPage() {
                 setSelectedColumnId(firstRow.columns[0].id);
             } else {
                  setSelectedColumnId(null);
-                 // If no columns left, add a default row
                  if (remainingRows.length === 0) {
                     const newRow = createNewRow(`row-${baseId}-${rows.length}`);
                     setRows([newRow]);
@@ -156,30 +156,21 @@ export function LayoutComposerPage() {
 
   return (
     <div className="flex h-screen flex-col bg-background font-body text-foreground">
-      <header className="px-4 py-3 bg-card border-b flex items-center justify-between">
-         <div className="flex-grow">
-          {activeRow && (
-                <RowSettings 
-                  row={activeRow} 
-                  onUpdate={handleUpdateRow}
-                />
-              )}
-         </div>
-         <div className="flex items-center gap-4">
-          <Button onClick={() => setCodeDialogOpen(true)}>
-            <Code className="mr-2 h-4 w-4" />
-            Generate Code
-          </Button>
-        </div>
+       <header className="px-6 py-3 bg-card border-b flex items-center justify-between">
+        {activeRow && (
+          <RowSettings 
+            row={activeRow} 
+            onUpdate={handleUpdateRow}
+          />
+        )}
       </header>
       
       <main className="flex-grow grid grid-cols-12 gap-0 overflow-hidden">
-        {/* Left Panel */}
         <div className="col-span-3 bg-card p-4 border-r overflow-y-auto">
            <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-bold">Column Config</h2>
               <Button variant="secondary" size="sm" onClick={() => activeRow && handleAddColumn(activeRow.id)}>
-                  <Plus className="mr-2 h-4 w-4" /> Add Column
+                  <Plus className="mr-2 h-3 w-3" /> Add Column
               </Button>
             </div>
           {selectedColumn && activeColumnRow ? (
@@ -199,13 +190,18 @@ export function LayoutComposerPage() {
           )}
         </div>
 
-        {/* Right Panel */}
         <div className="col-span-9 p-6 flex flex-col bg-muted/30">
           <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-bold">Visual Layout</h2>
-               <Button size="sm" onClick={handleAddRow}>
-                  <Plus className="mr-2 h-4 w-4" /> Add Row
+            <h2 className="text-lg font-bold">Visual Layout</h2>
+            <div className="flex items-center gap-4">
+              <Button size="sm" onClick={handleAddRow}>
+                <Plus className="mr-2 h-3 w-3" /> Add Row
               </Button>
+              <Button size="sm" onClick={() => setCodeDialogOpen(true)}>
+                <Code className="mr-2 h-3 w-3" />
+                Generate Code
+              </Button>
+            </div>
           </div>
           <div className="flex-grow">
             <VisualLayout

@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { HelpCircle } from 'lucide-react';
+import { Separator } from '../ui/separator';
 
 interface RowSettingsProps {
   row: Row;
@@ -22,29 +23,28 @@ export function RowSettings({ row, onUpdate }: RowSettingsProps) {
     onUpdate(row.id, props);
   };
   return (
-    <div className="flex items-center gap-8">
+    <div className="flex items-center gap-4 w-full">
       <h2 className="text-lg font-bold text-foreground whitespace-nowrap">Row Config</h2>
-      <div className="flex items-center justify-between w-full">
-        <div className="flex items-center space-x-2">
+      <div className="flex items-center gap-2">
           <Switch
             id="multiple-rows"
             checked={row.multipleRows}
             onCheckedChange={(checked) => handleUpdate({ multipleRows: checked })}
           />
-          <Label htmlFor="multiple-rows" className="flex flex-col">
+          <Label htmlFor="multiple-rows" className="flex flex-col text-xs">
             <span>Multiple Rows</span>
-            <span className="text-muted-foreground text-xs">{row.multipleRows ? 'Allowed' : 'Not-Allowed'}</span>
+            <span className="text-muted-foreground font-normal">{row.multipleRows ? 'Allowed' : 'Not-Allowed'}</span>
           </Label>
         </div>
-
+        <Separator orientation='vertical' className="h-8" />
         <div className="flex items-center gap-4">
           <div className="space-y-1">
-            <Label className="flex items-center gap-1 text-sm">Horizontal Alignment <HelpCircle className="h-3 w-3" /></Label>
+            <Label className="flex items-center gap-1 text-xs">Horizontal Alignment <HelpCircle className="h-3 w-3 text-muted-foreground" /></Label>
             <Select
               value={row.horizontalAlignment}
               onValueChange={(value) => handleUpdate({ horizontalAlignment: value as Row['horizontalAlignment'] })}
             >
-              <SelectTrigger className="w-40"><SelectValue /></SelectTrigger>
+              <SelectTrigger className="w-32"><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="start">Start</SelectItem>
                 <SelectItem value="center">Center</SelectItem>
@@ -55,12 +55,12 @@ export function RowSettings({ row, onUpdate }: RowSettingsProps) {
             </Select>
           </div>
           <div className="space-y-1">
-            <Label className="flex items-center gap-1 text-sm">Vertical Alignment <HelpCircle className="h-3 w-3" /></Label>
+            <Label className="flex items-center gap-1 text-xs">Vertical Alignment <HelpCircle className="h-3 w-3 text-muted-foreground" /></Label>
              <Select
               value={row.verticalAlignment}
               onValueChange={(value) => handleUpdate({ verticalAlignment: value as Row['verticalAlignment'] })}
             >
-              <SelectTrigger className="w-40"><SelectValue /></SelectTrigger>
+              <SelectTrigger className="w-32"><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="start">Start</SelectItem>
                 <SelectItem value="center">Center</SelectItem>
@@ -70,12 +70,12 @@ export function RowSettings({ row, onUpdate }: RowSettingsProps) {
             </Select>
           </div>
           <div className="space-y-1">
-            <Label className="flex items-center gap-1 text-sm">Pull To Boundary <HelpCircle className="h-3 w-3" /></Label>
+            <Label className="flex items-center gap-1 text-xs">Pull To Boundary <HelpCircle className="h-3 w-3 text-muted-foreground" /></Label>
              <Select
               value={row.pullBoundaries}
               onValueChange={(value) => handleUpdate({ pullBoundaries: value as Row['pullBoundaries'] })}
             >
-              <SelectTrigger className="w-40"><SelectValue /></SelectTrigger>
+              <SelectTrigger className="w-32"><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="none">Default</SelectItem>
                 <SelectItem value="small">Small</SelectItem>
@@ -85,7 +85,6 @@ export function RowSettings({ row, onUpdate }: RowSettingsProps) {
             </Select>
           </div>
         </div>
-      </div>
     </div>
   );
 }

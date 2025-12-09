@@ -86,7 +86,7 @@ export function ColumnSettings({
     <div className="w-full">
       <Accordion type="single" collapsible defaultValue="column-0" className="w-full">
         <AccordionItem value={`column-${columnIndex}`}>
-          <AccordionTrigger className="font-bold text-lg w-full justify-between">
+          <AccordionTrigger className="font-bold text-base w-full justify-between">
             <div className="flex items-center">
               Column {columnIndex + 1}
             </div>
@@ -94,7 +94,7 @@ export function ColumnSettings({
           <AccordionContent className="pt-4 space-y-4">
             <div className="flex items-center justify-between mb-2 gap-4">
                 <div className="w-1/2">
-                    <Label className="flex items-center gap-1 mb-2">Flexibility <HelpCircle className="h-4 w-4 text-muted-foreground" /></Label>
+                    <Label className="flex items-center gap-1 mb-2 text-xs">Flexibility <HelpCircle className="h-3 w-3 text-muted-foreground" /></Label>
                     <Select value={column.flexibility} onValueChange={handleFlexibilityChange}>
                         <SelectTrigger>
                           <SelectValue placeholder="Select type" />
@@ -107,7 +107,7 @@ export function ColumnSettings({
                     </Select>
                 </div>
                 <div className="w-1/2">
-                    <Label className="flex items-center gap-1 mb-2">Padding <HelpCircle className="h-4 w-4 text-muted-foreground" /></Label>
+                    <Label className="flex items-center gap-1 mb-2 text-xs">Padding <HelpCircle className="h-3 w-3 text-muted-foreground" /></Label>
                     <Select value={column.padding} onValueChange={handlePaddingChange}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select padding" />
@@ -123,9 +123,9 @@ export function ColumnSettings({
 
             {column.flexibility === 'default' && (
                 <div className="space-y-2">
-                    <div className="flex justify-between items-center">
-                        <Label htmlFor={`size-${column.id}`}>Size</Label>
-                        <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                    <div className="flex justify-between items-center mb-2">
+                        <Label htmlFor={`size-${column.id}`} className="text-xs">Size</Label>
+                        <HelpCircle className="h-3 w-3 text-muted-foreground" />
                     </div>
                     <Select value={String(column.size)} onValueChange={(v) => handleSizeChange('size', v)}>
                         <SelectTrigger id={`size-${column.id}`}>
@@ -139,7 +139,7 @@ export function ColumnSettings({
             )}
             <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                    <Label>Device Specific</Label>
+                    <Label className="text-xs">Device Specific</Label>
                 </div>
                 <Switch
                     id={`device-specific-${column.id}`}
@@ -151,7 +151,7 @@ export function ColumnSettings({
             {column.deviceSpecific && (
                  <div className="space-y-4 pt-2 border-t mt-4">
                     <div className="space-y-2 pt-4">
-                        <Label htmlFor={`size-small-${column.id}`}>Small Device Size (Mobile)</Label>
+                        <Label htmlFor={`size-small-${column.id}`} className="text-xs">Small Device Size (Mobile)</Label>
                         <Select value={String(column.sizeSmall)} onValueChange={(v) => handleSizeChange('sizeSmall', v)}>
                             <SelectTrigger id={`size-small-${column.id}`}>
                                 <SelectValue />
@@ -162,7 +162,7 @@ export function ColumnSettings({
                         </Select>
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor={`size-medium-${column.id}`}>Medium Device Size (Tablet)</Label>
+                        <Label htmlFor={`size-medium-${column.id}`} className="text-xs">Medium Device Size (Tablet)</Label>
                         <Select value={String(column.sizeMedium)} onValueChange={(v) => handleSizeChange('sizeMedium', v)}>
                             <SelectTrigger id={`size-medium-${column.id}`}>
                                 <SelectValue />
@@ -175,7 +175,7 @@ export function ColumnSettings({
                 </div>
             )}
              <Button variant="outline" size="sm" className="w-full text-destructive hover:text-destructive mt-4" onClick={() => onDelete(column.id)}>
-                <Trash2 className="h-4 w-4 mr-2" />
+                <Trash2 className="h-3 w-3 mr-2" />
                 Delete Column
             </Button>
           </AccordionContent>
