@@ -35,12 +35,13 @@ interface ColumnSettingsProps {
 }
 
 const paddingOptions = [
-    { value: 'slds-p-around_small', label: 'Small Around'},
-    { value: 'slds-p-around_medium', label: 'Medium Around'},
-    { value: 'slds-p-around_large', label: 'Large Around'},
-    { value: 'slds-p-horizontal_small', label: 'Small Horizontal'},
-    { value: 'slds-p-vertical_small', label: 'Small Vertical'},
-    { value: 'slds-m-around_small', label: 'Small Margin'},
+    { value: '', label: 'Default' },
+    { value: 'slds-p-horizontal_small', label: 'horizontal-small'},
+    { value: 'slds-p-horizontal_medium', label: 'horizontal-medium'},
+    { value: 'slds-p-horizontal_large', label: 'horizontal-large'},
+    { value: 'slds-p-around_small', label: 'around-small'},
+    { value: 'slds-p-around_medium', label: 'around-medium'},
+    { value: 'slds-p-around_large', label: 'around-large'},
 ]
 
 const flexibilityOptions = [

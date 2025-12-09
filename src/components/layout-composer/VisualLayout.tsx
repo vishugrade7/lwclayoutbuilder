@@ -38,8 +38,11 @@ const sldsPaddingToTailwind: Record<string, string> = {
     'slds-p-around_medium': 'p-4',
     'slds-p-around_large': 'p-6',
     'slds-p-horizontal_small': 'px-2',
+    'slds-p-horizontal_medium': 'px-4',
+    'slds-p-horizontal_large': 'px-6',
     'slds-p-vertical_small': 'py-2',
-    'slds-m-around_small': 'm-2',
+    'slds-p-vertical_medium': 'py-4',
+    'slds-p-vertical_large': 'py-6',
 }
 
 const flexClassMap: Record<Column['flexibility'], string> = {
@@ -88,28 +91,27 @@ export function VisualLayout({
                 const flexBasis = col.flexibility === 'default' ? `calc(${(col.size / 12) * 100}% - 0.75rem)` : 'auto';
 
                 return (
-                  <button
+                  <div
                     key={col.id}
-                    onClick={() => onSelectColumn(col.id)}
                     className={cn(
-                      'flex items-center justify-center rounded-none text-sm transition-all duration-200 ease-in-out',
+                      'flex items-center justify-center rounded-md text-sm transition-all duration-200 ease-in-out',
                       'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
-                      'bg-card border border-foreground',
-                      isSelected ? 'ring-2 ring-primary ring-offset-2' : '',
+                      'bg-card border',
+                      isSelected ? 'ring-2 ring-primary ring-offset-2 border-primary' : 'border-foreground/50',
                        vAlignClassMap[row.verticalAlignment] === 'items-stretch' ? '' : 'h-20',
                       flexClassMap[col.flexibility],
-                      sldsPaddingToTailwind[col.padding] || 'p-2'
                     )}
                     style={{ flexBasis: flexBasis }}
-                    aria-pressed={isSelected}
+                    onClick={() => onSelectColumn(col.id)}
                   >
                     <div className={cn(
-                        "text-center text-foreground w-full h-full flex items-center justify-center", 
+                        "text-center text-foreground w-full h-full flex items-center justify-center rounded-md",
+                        sldsPaddingToTailwind[col.padding] || 'p-2',
                         isSelected ? "bg-primary/10" : ""
                     )}>
                       <span className="font-semibold">{index + 1}</span>
                     </div>
-                  </button>
+                  </div>
                 )
               })}
             </div>
