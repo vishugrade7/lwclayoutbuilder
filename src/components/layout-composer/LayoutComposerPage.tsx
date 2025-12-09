@@ -28,7 +28,7 @@ const createNewRow = (id: string): Row => ({
   verticalAlignment: 'start',
   pullBoundaries: 'none',
   multipleRows: true,
-  flexibility: 'default',
+  columnType: 'fixed',
   padding: 'none',
 });
 
@@ -43,33 +43,35 @@ const DEFAULT_LAYOUT: Row[] = [
         sizeSmall: 12,
         sizeMedium: 12,
         deviceSpecific: false,
+        flexibility: 'grow'
       },
     ],
     horizontalAlignment: 'start',
     verticalAlignment: 'start',
     pullBoundaries: 'none',
     multipleRows: false,
-    flexibility: 'default',
+    columnType: 'grow',
     padding: 'slds-p-around_small',
   },
 ];
 
 const paddingOptions = [
   { value: 'none', label: 'Default' },
-  { value: 'slds-p-horizontal_small', label: 'horizontal-small'},
-  { value: 'slds-p-horizontal_medium', label: 'horizontal-medium'},
-  { value: 'slds-p-horizontal_large', label: 'horizontal-large'},
-  { value: 'slds-p-around_small', label: 'around-small'},
-  { value: 'slds-p-around_medium', label: 'around-medium'},
-  { value: 'slds-p-around_large', label: 'around-large'},
-  { value: 'slds-p-vertical_small', label: 'vertical-small'},
-  { value: 'slds-p-vertical_medium', label: 'vertical-medium'},
-  { value: 'slds-p-vertical_large', label: 'vertical-large'},
+  { value: 'horizontal-small', label: 'horizontal-small'},
+  { value: 'horizontal-medium', label: 'horizontal-medium'},
+  { value: 'horizontal-large', label: 'horizontal-large'},
+  { value: 'around-small', label: 'around-small'},
+  { value: 'around-medium', label: 'around-medium'},
+  { value: 'around-large', label: 'around-large'},
+  { value: 'vertical-small', label: 'vertical-small'},
+  { value: 'vertical-medium', label: 'vertical-medium'},
+  { value: 'vertical-large', label: 'vertical-large'},
 ]
 
 const columnTypeOptions = [
-    { value: 'default', label: 'Fixed' },
-    { value: 'fluid', label: 'Fluid' },
+    { value: 'fixed', label: 'Fixed' },
+    { value: 'auto', label: 'Auto' },
+    { value: 'grow', label: 'Grow' },
 ]
 
 
@@ -171,7 +173,7 @@ export function LayoutComposerPage() {
 
   const handleColumnTypeChange = (value: string) => {
     if (activeRow) {
-      handleUpdateRow(activeRow.id, { flexibility: value as Row['flexibility'] });
+      handleUpdateRow(activeRow.id, { columnType: value as Row['columnType'] });
     }
   };
 
@@ -182,8 +184,8 @@ export function LayoutComposerPage() {
   };
 
   return (
-    <div className="flex h-screen flex-col bg-background font-body text-foreground">
-       <header className="px-6 py-3 bg-card border-b flex items-center justify-between">
+    <div className="flex h-screen flex-col bg-transparent font-body text-foreground">
+       <header className="px-6 py-3 bg-background/80 border-b backdrop-blur-sm sticky top-0 z-10 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <h1 className="text-xl font-bold font-headline text-foreground whitespace-nowrap">Layout Composer</h1>
           <ThemeSwitcher/>
@@ -197,7 +199,7 @@ export function LayoutComposerPage() {
       </header>
       
       <main className="flex-grow grid grid-cols-12 gap-0 overflow-hidden">
-        <div className="col-span-3 bg-card p-4 border-r overflow-y-auto">
+        <div className="col-span-3 bg-card/80 p-4 border-r overflow-y-auto">
            <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-bold">Column Config</h2>
               <Button variant="secondary" size="sm" onClick={() => activeRow && handleAddColumn(activeRow.id)} className="rounded-full">
@@ -209,7 +211,7 @@ export function LayoutComposerPage() {
                 <div className="flex items-center justify-between gap-4">
                   <div className="w-1/2">
                       <Label className="flex items-center gap-1 mb-2 text-xs">Column type <HelpCircle className="h-3 w-3 text-muted-foreground" /></Label>
-                      <Select value={activeRow.flexibility} onValueChange={handleColumnTypeChange}>
+                      <Select value={activeRow.columnType} onValueChange={handleColumnTypeChange}>
                           <SelectTrigger className={cn("bg-card rounded-full")}>
                             <SelectValue placeholder="Select type" />
                           </SelectTrigger>
@@ -260,7 +262,7 @@ export function LayoutComposerPage() {
             </div>
         </div>
 
-        <div className="col-span-9 p-6 flex flex-col bg-muted/30">
+        <div className="col-span-9 p-6 flex flex-col bg-background/30">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-bold">Visual Layout</h2>
             <div className="flex items-center gap-4">

@@ -35,6 +35,7 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/20 via-transparent to-primary/20 -z-10" />
           {children}
           <Toaster />
         </ThemeProvider>
