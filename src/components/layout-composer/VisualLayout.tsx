@@ -34,7 +34,7 @@ const pullBoundariesClassMap: Record<string, string> = {
 }
 
 const sldsPaddingToTailwind: Record<string, string> = {
-    'none': 'p-2',
+    'none': 'p-0',
     'slds-p-around_small': 'p-2',
     'slds-p-around_medium': 'p-4',
     'slds-p-around_large': 'p-6',
@@ -79,13 +79,14 @@ export function VisualLayout({
 
         <div className='relative'>
             {rows.map((row) => (
-            <div key={row.id} className={cn(pullBoundariesClassMap[row.pullBoundaries])}>
-                <div
+            <div
+                key={row.id}
                 className={cn(
                     'flex',
                     row.multipleRows ? 'flex-wrap' : 'flex-nowrap',
                     hAlignClassMap[row.horizontalAlignment],
-                    vAlignClassMap[row.verticalAlignment]
+                    vAlignClassMap[row.verticalAlignment],
+                    pullBoundariesClassMap[row.pullBoundaries]
                 )}
                 style={{ gap: '0.75rem' }}
                 >
@@ -101,7 +102,7 @@ export function VisualLayout({
                             style.flex = `1 1 calc(${widthPercentage}% - 0.75rem)`;
                             style.maxWidth = `calc(${widthPercentage}% - 0.75rem)`;
                         } else {
-                           style.flex = `0 1 ${widthPercentage}%`;
+                           style.flex = `0 0 ${widthPercentage}%`;
                         }
                     } else {
                         style.flexGrow = 1;
@@ -119,13 +120,13 @@ export function VisualLayout({
                         isSelected ? 'ring-2 ring-primary ring-offset-2 border-primary' : 'border-foreground/50',
                         vAlignClassMap[row.verticalAlignment] === 'items-stretch' ? '' : 'h-20',
                         flexClassMap[row.flexibility],
+                        sldsPaddingToTailwind[row.padding] || 'p-2',
                         )}
                         style={style}
                         onClick={() => onSelectColumn(col.id)}
                     >
                         <div className={cn(
                             "text-center text-foreground w-full h-full flex items-center justify-center rounded-md",
-                            sldsPaddingToTailwind[row.padding] || 'p-2',
                             isSelected ? "bg-primary/10" : ""
                         )}>
                         <span className="font-semibold">{index + 1}</span>
@@ -134,7 +135,6 @@ export function VisualLayout({
                     )
                 })}
                 </div>
-            </div>
             ))}
         </div>
       </div>
