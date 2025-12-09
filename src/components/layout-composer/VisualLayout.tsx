@@ -1,6 +1,6 @@
 'use client';
 
-import type { Row } from '@/lib/types';
+import type { Column, Row } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
 
@@ -33,6 +33,25 @@ const pullBoundariesClassMap: Record<string, string> = {
     large: '-mx-8',
 }
 
+const sldsPaddingToTailwind: Record<string, string> = {
+    'slds-p-around_small': 'p-2',
+    'slds-p-around_medium': 'p-4',
+    'slds-p-around_large': 'p-6',
+    'slds-p-horizontal_small': 'px-2',
+    'slds-p-vertical_small': 'py-2',
+    'slds-m-around_small': 'm-2',
+}
+
+const flexClassMap: Record<Column['flexibility'], string> = {
+    'default': '', // Uses flex-basis for sizing
+    'auto': 'flex-1',
+    'shrink': 'flex-shrink',
+    'no-shrink': 'flex-shrink-0',
+    'grow': 'flex-grow',
+    'no-grow': 'flex-grow-0',
+    'no-flex': 'flex-none'
+};
+
 export function VisualLayout({
   rows,
   selectedColumnId,
@@ -52,36 +71,42 @@ export function VisualLayout({
             isLoading ? 'opacity-50' : 'opacity-100'
         )}>
           {rows.map((row) => (
-            <div key={row.id} className={cn("bg-background", pullBoundariesClassMap[row.pullBoundaries])}>
+            <div key={row.id} className={cn("bg-background border border-dashed border-gray-300 p-1", pullBoundariesClassMap[row.pullBoundaries])}>
               <div
                 className={cn(
-                  'flex min-h-[100px] rounded',
+                  'flex min-h-[100px] rounded bg-muted/30',
                   row.multipleRows && 'flex-wrap',
                   hAlignClassMap[row.horizontalAlignment],
                   vAlignClassMap[row.verticalAlignment]
                 )}
                 style={{ gap: '0.75rem' }}
               >
-                {row.columns.map((col, index) => (
+                {row.columns.map((col, index) => {
+                  const isSelected = selectedColumnId === col.id;
+                  const flexBasis = col.flexibility === 'default' ? `calc(${(col.size / 12) * 100}% - 0.75rem)` : 'auto';
+
+                  return (
                   <button
                     key={col.id}
                     onClick={() => onSelectColumn(col.id)}
                     className={cn(
                       'flex items-center justify-center rounded border text-sm transition-all duration-200 ease-in-out',
                       'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
-                      selectedColumnId === col.id
+                      isSelected
                         ? 'bg-white border-primary shadow-lg ring-2 ring-primary'
                         : 'bg-white hover:border-primary/50 border-input',
-                      vAlignClassMap[row.verticalAlignment] === 'items-stretch' ? '' : 'h-20'
+                      vAlignClassMap[row.verticalAlignment] === 'items-stretch' ? '' : 'h-20',
+                      flexClassMap[col.flexibility],
+                      sldsPaddingToTailwind[col.padding] || 'p-2'
                     )}
-                    style={{ flexBasis: `calc(${(col.size / 12) * 100}% - 0.75rem)` }}
-                    aria-pressed={selectedColumnId === col.id}
+                    style={{ flexBasis: flexBasis }}
+                    aria-pressed={isSelected}
                   >
-                    <div className="text-center text-foreground">
+                    <div className={cn("text-center text-foreground w-full h-full flex items-center justify-center", isSelected ? "bg-primary/10" : "bg-gray-50")}>
                         <span className="font-semibold">{index + 1}</span>
                     </div>
                   </button>
-                ))}
+                )})}
               </div>
             </div>
           ))}
