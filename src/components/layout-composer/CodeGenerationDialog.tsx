@@ -35,9 +35,10 @@ ${rows.map(row => {
     return `    <lightning-layout ${rowAttrs}>
 ${row.columns.map((col, index) => {
     const colAttrs = [
-        row.flexibility === 'default' ? `size="${col.size}"` : 'flexibility="auto"',
+        col.columnType === 'fixed' ? `size="${col.size}"` : `flexibility="${col.columnType === 'fluid' ? 'auto' : 'grow'}"`,
         col.deviceSpecific ? `small-device-size="${col.sizeSmall}"` : '',
         col.deviceSpecific ? `medium-device-size="${col.sizeMedium}"` : '',
+        col.deviceSpecific ? `large-device-size="${col.size}"` : '',
         row.padding !== 'none' ? `padding="${row.padding.replace('slds-p-', '')}"` : ''
     ].filter(Boolean).join(' ');
 
@@ -74,7 +75,7 @@ export function CodeGenerationDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-3xl">
+      <DialogContent className="max-w-5xl">
         <DialogHeader className="text-left">
           <DialogTitle>Generated LWC Code</DialogTitle>
           <DialogDescription>
