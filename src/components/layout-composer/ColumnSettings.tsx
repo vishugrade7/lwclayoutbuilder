@@ -35,7 +35,7 @@ interface ColumnSettingsProps {
 }
 
 const paddingOptions = [
-    { value: '', label: 'Default' },
+    { value: 'none', label: 'Default' },
     { value: 'slds-p-horizontal_small', label: 'horizontal-small'},
     { value: 'slds-p-horizontal_medium', label: 'horizontal-medium'},
     { value: 'slds-p-horizontal_large', label: 'horizontal-large'},

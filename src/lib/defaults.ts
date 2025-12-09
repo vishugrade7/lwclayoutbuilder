@@ -5,7 +5,7 @@ export const createNewColumn = (id: string): Column => ({
   size: 3,
   sizeSmall: 12,
   sizeMedium: 6,
-  padding: '',
+  padding: 'none',
   type: 'Default',
   deviceSpecific: false,
   flexibility: 'default',

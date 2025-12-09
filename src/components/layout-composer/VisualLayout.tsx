@@ -34,6 +34,7 @@ const pullBoundariesClassMap: Record<string, string> = {
 }
 
 const sldsPaddingToTailwind: Record<string, string> = {
+    'none': '',
     'slds-p-around_small': 'p-2',
     'slds-p-around_medium': 'p-4',
     'slds-p-around_large': 'p-6',
