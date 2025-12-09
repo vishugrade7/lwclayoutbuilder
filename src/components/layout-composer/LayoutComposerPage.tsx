@@ -54,19 +54,19 @@ const DEFAULT_LAYOUT: Row[] = [
 
 const paddingOptions = [
   { value: 'none', label: 'Default' },
-  { value: 'slds-p-horizontal_small', label: 'Horizontal Small'},
-  { value: 'slds-p-horizontal_medium', label: 'Horizontal Medium'},
-  { value: 'slds-p-horizontal_large', label: 'Horizontal Large'},
-  { value: 'slds-p-around_small', label: 'Around Small'},
-  { value: 'slds-p-around_medium', label: 'Around Medium'},
-  { value: 'slds-p-around_large', label: 'Around Large'},
-  { value: 'slds-p-vertical_small', label: 'Vertical Small'},
-  { value: 'slds-p-vertical_medium', label: 'Vertical Medium'},
-  { value: 'slds-p-vertical_large', label: 'Vertical Large'},
+  { value: 'slds-p-horizontal_small', label: 'horizontal-small'},
+  { value: 'slds-p-horizontal_medium', label: 'horizontal-medium'},
+  { value: 'slds-p-horizontal_large', label: 'horizontal-large'},
+  { value: 'slds-p-around_small', label: 'around-small'},
+  { value: 'slds-p-around_medium', label: 'around-medium'},
+  { value: 'slds-p-around_large', label: 'around-large'},
+  { value: 'slds-p-vertical_small', label: 'vertical-small'},
+  { value: 'slds-p-vertical_medium', label: 'vertical-medium'},
+  { value: 'slds-p-vertical_large', label: 'vertical-large'},
 ]
 
-const flexibilityOptions = [
-    { value: 'default', label: 'Default' },
+const columnTypeOptions = [
+    { value: 'default', label: 'Fixed' },
     { value: 'auto', label: 'Auto' },
     { value: 'shrink', label: 'Shrink' },
     { value: 'no-shrink', label: 'No-Shrink' },
@@ -172,7 +172,7 @@ export function LayoutComposerPage() {
     return rows.find(r => r.columns.some(c => c.id === selectedColumnId)) ?? rows[0] ?? null;
   }, [rows, selectedColumnId]);
 
-  const handleFlexibilityChange = (value: string) => {
+  const handleColumnTypeChange = (value: string) => {
     if (activeRow) {
       handleUpdateRow(activeRow.id, { flexibility: value as Row['flexibility'] });
     }
@@ -207,13 +207,13 @@ export function LayoutComposerPage() {
               <div className="space-y-4 mb-4 p-4 bg-muted/50 rounded-lg">
                 <div className="flex items-center justify-between gap-4">
                   <div className="w-1/2">
-                      <Label className="flex items-center gap-1 mb-2 text-xs">Flexibility <HelpCircle className="h-3 w-3 text-muted-foreground" /></Label>
-                      <Select value={activeRow.flexibility} onValueChange={handleFlexibilityChange}>
+                      <Label className="flex items-center gap-1 mb-2 text-xs">Column type <HelpCircle className="h-3 w-3 text-muted-foreground" /></Label>
+                      <Select value={activeRow.flexibility} onValueChange={handleColumnTypeChange}>
                           <SelectTrigger className="bg-card">
                             <SelectValue placeholder="Select type" />
                           </SelectTrigger>
                           <SelectContent>
-                              {flexibilityOptions.map(option => (
+                              {columnTypeOptions.map(option => (
                                   <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
                               ))}
                           </SelectContent>
