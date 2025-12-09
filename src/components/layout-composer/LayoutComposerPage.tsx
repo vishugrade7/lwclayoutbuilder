@@ -1,16 +1,46 @@
 'use client';
 
-import React, { useState, useMemo, useCallback, useTransition } from 'react';
+import React, { useState, useMemo, useCallback, useTransition, useId } from 'react';
 import type { Row, Column } from '@/lib/types';
-import { DEFAULT_LAYOUT, createNewColumn } from '@/lib/defaults';
+import { createNewColumn } from '@/lib/defaults';
 import { RowSettings } from './RowSettings';
 import { VisualLayout } from './VisualLayout';
 import { ColumnSettings } from './ColumnSettings';
-import { generateId } from '@/lib/utils';
 import { Card, CardContent } from '../ui/card';
 import { Button } from '../ui/button';
 import { Plus } from 'lucide-react';
 import { CodeGenerationDialog } from './CodeGenerationDialog';
+
+const createNewRow = (id: string): Row => ({
+  id: `row-${id}`,
+  columns: [createNewColumn(`col-${id}-0`)],
+  horizontalAlignment: 'start',
+  verticalAlignment: 'start',
+  pullBoundaries: 'none',
+  multipleRows: true,
+});
+
+const initialRowId = 'initial-row';
+const DEFAULT_LAYOUT: Row[] = [
+  {
+    id: `row-${initialRowId}`,
+    columns: [
+      {
+        id: `col-${initialRowId}-0`,
+        size: 12,
+        sizeSmall: 12,
+        sizeMedium: 12,
+        padding: 'slds-p-around_small',
+        type: 'Default',
+        deviceSpecific: false,
+      },
+    ],
+    horizontalAlignment: 'start',
+    verticalAlignment: 'start',
+    pullBoundaries: 'none',
+    multipleRows: false,
+  },
+];
 
 export function LayoutComposerPage() {
   const [rows, setRows] = useState<Row[]>(DEFAULT_LAYOUT);
@@ -18,8 +48,9 @@ export function LayoutComposerPage() {
     DEFAULT_LAYOUT[0]?.columns[0]?.id ?? null
   );
   const [isCodeDialogOpen, setCodeDialogOpen] = useState(false);
-
   const [isPending, startTransition] = useTransition();
+  
+  const baseId = useId();
 
   const handleUpdateRow = useCallback((rowId: string, updatedProps: Partial<Row>) => {
     startTransition(() => {
@@ -46,15 +77,16 @@ export function LayoutComposerPage() {
 
   const handleAddColumn = useCallback((rowId: string) => {
     startTransition(() => {
-        const newColumn = createNewColumn();
-        setRows((prevRows) =>
-            prevRows.map((row) =>
-            row.id === rowId
-                ? { ...row, columns: [...row.columns, newColumn] }
-                : row
-            )
-        );
-        setSelectedColumnId(newColumn.id);
+        setRows((prevRows) => {
+            return prevRows.map((row) => {
+                if (row.id === rowId) {
+                    const newColumn = createNewColumn(`col-${row.id}-${row.columns.length}`);
+                    setSelectedColumnId(newColumn.id);
+                    return { ...row, columns: [...row.columns, newColumn] };
+                }
+                return row;
+            });
+        });
     });
   }, []);
 
@@ -86,36 +118,22 @@ export function LayoutComposerPage() {
                  setSelectedColumnId(null);
                  // If no columns left, add a default row
                  if (remainingRows.length === 0) {
-                    const newRow: Row = {
-                        id: generateId(),
-                        columns: [createNewColumn()],
-                        horizontalAlignment: 'start',
-                        verticalAlignment: 'start',
-                        pullBoundaries: 'none',
-                        multipleRows: true,
-                    };
+                    const newRow = createNewRow(`row-${baseId}-${rows.length}`);
                     setRows([newRow]);
                     setSelectedColumnId(newRow.columns[0].id);
                  }
             }
         }
     });
-  }, [selectedColumnId, rows]);
+  }, [selectedColumnId, rows, baseId]);
   
   const handleAddRow = useCallback(() => {
     startTransition(() => {
-      const newRow: Row = {
-        id: generateId(),
-        columns: [createNewColumn()],
-        horizontalAlignment: 'start',
-        verticalAlignment: 'start',
-        pullBoundaries: 'none',
-        multipleRows: true,
-      };
+      const newRow = createNewRow(`row-${baseId}-${rows.length}`);
       setRows(prevRows => [...prevRows, newRow]);
       setSelectedColumnId(newRow.columns[0].id);
     });
-  }, []);
+  }, [baseId, rows.length]);
 
   const selectedColumn = useMemo(() => {
     if (!selectedColumnId) return null;

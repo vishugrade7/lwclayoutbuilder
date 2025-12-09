@@ -126,6 +126,7 @@ export function ColumnSettings({
                     <Label>Device Specific</Label>
                 </div>
                 <Switch
+                    id={`device-specific-${column.id}`}
                     checked={column.deviceSpecific}
                     onCheckedChange={handleDeviceSpecificChange}
                 />
@@ -134,9 +135,9 @@ export function ColumnSettings({
             {column.deviceSpecific && (
                  <div className="space-y-4 pt-2 border-t mt-4">
                     <div className="space-y-2 pt-4">
-                        <Label>Small Device Size (Mobile)</Label>
+                        <Label htmlFor={`size-small-${column.id}`}>Small Device Size (Mobile)</Label>
                         <Select value={String(column.sizeSmall)} onValueChange={(v) => handleSizeChange('sizeSmall', v)}>
-                            <SelectTrigger>
+                            <SelectTrigger id={`size-small-${column.id}`}>
                                 <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -145,9 +146,9 @@ export function ColumnSettings({
                         </Select>
                     </div>
                     <div className="space-y-2">
-                        <Label>Medium Device Size (Tablet)</Label>
+                        <Label htmlFor={`size-medium-${column.id}`}>Medium Device Size (Tablet)</Label>
                         <Select value={String(column.sizeMedium)} onValueChange={(v) => handleSizeChange('sizeMedium', v)}>
-                            <SelectTrigger>
+                            <SelectTrigger id={`size-medium-${column.id}`}>
                                 <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
