@@ -183,15 +183,13 @@ export function LayoutComposerPage() {
   };
 
   return (
-    <div className="flex h-screen flex-col bg-background font-body text-foreground">
-       <header className="px-4 sm:px-6 py-3 bg-background/80 border-b backdrop-blur-sm sticky top-0 z-10 flex flex-col md:flex-row items-center gap-4">
-        <div className="flex items-center justify-between w-full md:w-auto">
+    <div className="flex h-screen flex-col bg-background font-body text-foreground bg-cover bg-center" style={{ backgroundImage: "url('/background.png')" }}>
+      <header className="px-4 sm:px-6 py-3 bg-card/80 border-b backdrop-blur-sm sticky top-0 z-10 flex items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
           <h1 className="text-xl font-bold font-headline text-foreground whitespace-nowrap">Layout Composer</h1>
-          <div className='flex items-center gap-4'>
-            <ThemeSwitcher/>
-          </div>
+          <ThemeSwitcher/>
         </div>
-        <div className='w-full'>
+        <div className="hidden md:flex">
           {activeRow && (
             <RowSettings 
               row={activeRow} 
@@ -203,6 +201,14 @@ export function LayoutComposerPage() {
       
       <main className="flex-grow grid grid-cols-1 lg:grid-cols-12 gap-0 overflow-hidden">
         <div className="col-span-12 lg:col-span-3 bg-card/50 p-4 border-r overflow-y-auto">
+          <div className="md:hidden">
+            {activeRow && (
+              <RowSettings 
+                row={activeRow} 
+                onUpdate={handleUpdateRow}
+              />
+            )}
+          </div>
            <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-bold">Column Config</h2>
               <Button variant="secondary" size="sm" onClick={() => activeRow && handleAddColumn(activeRow.id)} className="rounded-full">
