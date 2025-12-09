@@ -3,6 +3,7 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
 import { ThemeProvider } from '@/components/theme-provider';
+import { Header } from '@/components/Header';
 
 export const metadata: Metadata = {
   title: 'Lightning Layout Composer',
@@ -35,7 +36,10 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
-          {children}
+          <div className="flex flex-col h-screen">
+            <Header />
+            <main className="flex-grow overflow-hidden">{children}</main>
+          </div>
           <Toaster />
         </ThemeProvider>
       </body>
