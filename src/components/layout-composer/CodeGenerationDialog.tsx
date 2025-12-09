@@ -5,7 +5,6 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-  DialogFooter,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Row } from '@/lib/types';
@@ -23,7 +22,7 @@ interface CodeGenerationDialogProps {
 }
 
 function generateLwcHtml(rows: Row[]): string {
-  return `<template>
+    return `<template>
 ${rows.map(row => {
     const rowAttrs = [
       row.multipleRows ? 'multiple-rows="true"' : '',
@@ -32,17 +31,29 @@ ${rows.map(row => {
       row.pullBoundaries !== 'none' ? `pull-to-boundary="${row.pullBoundaries}"` : ''
     ].filter(Boolean).join(' ');
 
-    return `    <lightning-layout ${rowAttrs}>
-${row.columns.map((col, index) => {
-    const colAttrs = [
-        col.columnType === 'fixed' ? `size="${col.size}"` : `flexibility="${col.columnType === 'fluid' ? 'auto' : 'grow'}"`,
-        col.deviceSpecific ? `small-device-size="${col.sizeSmall}"` : '',
-        col.deviceSpecific ? `medium-device-size="${col.sizeMedium}"` : '',
-        col.deviceSpecific ? `large-device-size="${col.size}"` : '',
-        row.padding !== 'none' ? `padding="${row.padding.replace('slds-p-', '')}"` : ''
-    ].filter(Boolean).join(' ');
+    const layoutClass = rowAttrs ? `    <lightning-layout ${rowAttrs}>` : '    <lightning-layout>';
 
-    return `        <lightning-layout-item ${colAttrs}>
+    return `${layoutClass}
+${row.columns.map((col, index) => {
+    const colAttrs: string[] = [];
+    if (row.columnType === 'fixed') {
+        colAttrs.push(`size="${col.size}"`);
+        if (col.deviceSpecific) {
+            colAttrs.push(`small-device-size="${col.sizeSmall}"`);
+            colAttrs.push(`medium-device-size="${col.sizeMedium}"`);
+            colAttrs.push(`large-device-size="${col.size}"`);
+        }
+    } else {
+        colAttrs.push(`flexibility="${row.columnType}"`);
+    }
+
+    if (row.padding !== 'none') {
+        colAttrs.push(`padding="${row.padding.replace('slds-p-', '')}"`);
+    }
+    
+    const layoutItemAttrs = colAttrs.join(' ');
+
+    return `        <lightning-layout-item ${layoutItemAttrs}>
             <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small">
                 Column ${index + 1}
             </div>
@@ -75,14 +86,14 @@ export function CodeGenerationDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-5xl">
-        <DialogHeader className="text-left">
+      <DialogContent className="max-w-4xl p-4">
+        <DialogHeader className="text-left px-2">
           <DialogTitle>Generated LWC Code</DialogTitle>
           <DialogDescription>
             Copy the generated HTML markup for your Lightning Web Component.
           </DialogDescription>
         </DialogHeader>
-        <div className="relative my-4">
+        <div className="relative">
             <SyntaxHighlighter language="html" style={vscDarkPlus} customStyle={{ borderRadius: '0.5rem', margin: 0, background: '#1E1E1E' }} >
                 {generatedCode}
             </SyntaxHighlighter>
@@ -95,11 +106,6 @@ export function CodeGenerationDialog({
                 {hasCopied ? <Check className="h-4 w-4 text-green-400" /> : <Clipboard className="h-4 w-4 text-white" />}
             </Button>
         </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
-            Close
-          </Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
