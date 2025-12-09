@@ -84,7 +84,9 @@ export function VisualLayout({
             >
               {row.columns.map((col, index) => {
                 const isSelected = selectedColumnId === col.id;
-                const width = row.flexibility === 'default' ? `calc(${(col.size / 12) * 100}% - 0.75rem)` : undefined;
+                const flexBasis = row.flexibility === 'default' 
+                    ? `calc(${(col.size / 12) * 100}% - ${col.size === 12 ? '0px' : '0.75rem'})` 
+                    : undefined;
                 
                 return (
                   <div
@@ -97,7 +99,11 @@ export function VisualLayout({
                        vAlignClassMap[row.verticalAlignment] === 'items-stretch' ? '' : 'h-20',
                       flexClassMap[row.flexibility],
                     )}
-                    style={{ flexBasis: width, flexGrow: row.flexibility === 'fluid' ? 1 : 0 }}
+                    style={{ 
+                      flexBasis: flexBasis, 
+                      flexGrow: row.flexibility === 'fluid' ? 1 : 0,
+                      flexShrink: row.flexibility === 'fluid' ? 1 : 0,
+                     }}
                     onClick={() => onSelectColumn(col.id)}
                   >
                     <div className={cn(
