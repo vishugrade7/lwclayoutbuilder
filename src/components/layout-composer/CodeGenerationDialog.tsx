@@ -23,35 +23,32 @@ interface CodeGenerationDialogProps {
 }
 
 function generateLwcHtml(rows: Row[]): string {
-    return `<template>
-    <lightning-card title="Generated Layout" icon-name="custom:custom14">
+  return `<template>
 ${rows.map(row => {
-    const rowClasses = [
-        'slds-grid',
-        row.multipleRows ? 'slds-wrap' : '',
-        row.horizontalAlignment !== 'start' ? `slds-grid_align-${row.horizontalAlignment}` : '',
-        row.verticalAlignment !== 'start' ? `slds-grid_vertical-align-${row.verticalAlignment}` : '',
-        row.pullBoundaries !== 'none' ? `slds-grid_pull-padded-${row.pullBoundaries}` : ''
+    const rowAttrs = [
+      row.multipleRows ? 'multiple-rows="true"' : '',
+      row.horizontalAlignment !== 'start' ? `horizontal-align="${row.horizontalAlignment}"` : '',
+      row.verticalAlignment !== 'start' ? `vertical-align="${row.verticalAlignment}"` : '',
+      row.pullBoundaries !== 'none' ? `pull-to-boundary="${row.pullBoundaries}"` : ''
     ].filter(Boolean).join(' ');
 
-    return `        <div class="${rowClasses}">
-${row.columns.map(col => {
-    const colClasses = [
-        'slds-col',
-        row.padding,
-        row.flexibility !== 'default' ? `slds-${row.flexibility}` : '',
-        row.flexibility === 'default' ? `slds-size_${col.size}-of-12` : '',
-        col.deviceSpecific ? `slds-medium-size_${col.sizeMedium}-of-12` : '',
-        col.deviceSpecific ? `slds-small-size_${col.sizeSmall}-of-12` : ''
+    return `    <lightning-layout ${rowAttrs}>
+${row.columns.map((col, index) => {
+    const colAttrs = [
+        row.flexibility === 'default' ? `size="${col.size}"` : 'flexibility="auto"',
+        col.deviceSpecific ? `small-device-size="${col.sizeSmall}"` : '',
+        col.deviceSpecific ? `medium-device-size="${col.sizeMedium}"` : '',
+        row.padding !== 'none' ? `padding="${row.padding.replace('slds-p-', '')}"` : ''
     ].filter(Boolean).join(' ');
 
-    return `            <div class="${colClasses}">
-                <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small">Column</div>
-            </div>`;
+    return `        <lightning-layout-item ${colAttrs}>
+            <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small">
+                Column ${index + 1}
+            </div>
+        </lightning-layout-item>`;
 }).join('\n')}
-        </div>`;
+    </lightning-layout>`;
 }).join('\n')}
-    </lightning-card>
 </template>`;
 }
 

@@ -49,8 +49,8 @@ export function RowSettings({ row, onUpdate }: RowSettingsProps) {
                 <SelectItem value="start">Start</SelectItem>
                 <SelectItem value="center">Center</SelectItem>
                 <SelectItem value="end">End</SelectItem>
-                <SelectItem value="space-around">Space Around</SelectItem>
-                <SelectItem value="space-between">Space Between</SelectItem>
+                <SelectItem value="space">Space</SelectItem>
+                <SelectItem value="spread">Spread</SelectItem>
               </SelectContent>
             </Select>
           </div>

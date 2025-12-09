@@ -1,6 +1,6 @@
 'use client';
 
-import type { Column, Row } from '@/lib/types';
+import type { Row } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
 
@@ -11,22 +11,22 @@ interface VisualLayoutProps {
   isLoading: boolean;
 }
 
-const hAlignClassMap: Record<string, string> = {
+const hAlignClassMap: Record<Row['horizontalAlignment'], string> = {
   start: 'justify-start',
   center: 'justify-center',
   end: 'justify-end',
-  'space-around': 'justify-around',
-  'space-between': 'justify-between',
+  space: 'justify-around',
+  spread: 'justify-between',
 };
 
-const vAlignClassMap: Record<string, string> = {
+const vAlignClassMap: Record<Row['verticalAlignment'], string> = {
   start: 'items-start',
   center: 'items-center',
   end: 'items-end',
   stretch: 'items-stretch',
 };
 
-const pullBoundariesClassMap: Record<string, string> = {
+const pullBoundariesClassMap: Record<Row['pullBoundaries'], string> = {
     none: '',
     small: '-mx-2',
     medium: '-mx-4',
@@ -45,11 +45,6 @@ const sldsPaddingToTailwind: Record<string, string> = {
     'slds-p-vertical_medium': 'py-4',
     'slds-p-vertical_large': 'py-6',
 }
-
-const flexClassMap: Record<Row['flexibility'], string> = {
-    'default': '', 
-    'fluid': 'flex-1',
-};
 
 export function VisualLayout({
   rows,
@@ -77,12 +72,12 @@ export function VisualLayout({
             ))}
         </div>
 
-        <div className='relative'>
+        <div className='relative space-y-2'>
             {rows.map((row) => (
             <div
                 key={row.id}
                 className={cn(
-                    'flex',
+                    'flex w-full',
                     row.multipleRows ? 'flex-wrap' : 'flex-nowrap',
                     hAlignClassMap[row.horizontalAlignment],
                     vAlignClassMap[row.verticalAlignment],
@@ -98,13 +93,15 @@ export function VisualLayout({
                     const style: React.CSSProperties = {};
 
                     if (row.flexibility === 'default') {
-                        if (row.multipleRows) {
-                            style.flex = `1 1 calc(${widthPercentage}% - 0.75rem)`;
+                       if (row.multipleRows) {
+                            style.flexBasis = `calc(${widthPercentage}% - 0.75rem)`;
+                            style.flexGrow = 0;
+                            style.flexShrink = 0;
                             style.maxWidth = `calc(${widthPercentage}% - 0.75rem)`;
                         } else {
                            style.flex = `0 0 ${widthPercentage}%`;
                         }
-                    } else {
+                    } else { // fluid
                         style.flexGrow = 1;
                         style.flexShrink = 1;
                         style.flexBasis = 0;
@@ -119,8 +116,7 @@ export function VisualLayout({
                         'bg-card border',
                         isSelected ? 'ring-2 ring-primary ring-offset-2 border-primary' : 'border-foreground/50',
                         vAlignClassMap[row.verticalAlignment] === 'items-stretch' ? '' : 'h-20',
-                        flexClassMap[row.flexibility],
-                        sldsPaddingToTailwind[row.padding] || 'p-2',
+                         sldsPaddingToTailwind[row.padding] || 'p-2',
                         )}
                         style={style}
                         onClick={() => onSelectColumn(col.id)}

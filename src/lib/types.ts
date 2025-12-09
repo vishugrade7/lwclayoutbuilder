@@ -15,8 +15,8 @@ export interface Row {
     | 'start'
     | 'center'
     | 'end'
-    | 'space-around'
-    | 'space-between';
+    | 'space'
+    | 'spread';
   verticalAlignment: 'start' | 'center' | 'end' | 'stretch';
   pullBoundaries: 'none' | 'small' | 'medium' | 'large';
   multipleRows: boolean;
