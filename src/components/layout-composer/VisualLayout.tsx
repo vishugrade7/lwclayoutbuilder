@@ -98,8 +98,8 @@ export function VisualLayout({
 
                     if (row.flexibility === 'default') {
                         if (row.multipleRows) {
-                           style.flex = `0 0 calc(${widthPercentage}% - ${(12 - col.size) * (1 / 12) * 0.75}rem)`;
-                           style.width = `${widthPercentage}%`;
+                            style.flex = `1 1 ${widthPercentage}%`;
+                            style.maxWidth = `${widthPercentage}%`;
                         } else {
                            style.flex = `0 1 ${widthPercentage}%`;
                         }
