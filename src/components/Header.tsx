@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from './ui/button';
 import { ThemeSwitcher } from './layout-composer/ThemeSwitcher';
 
 export function Header() {
@@ -12,6 +13,7 @@ export function Header() {
         </h1>
       </div>
       <div className="flex items-center gap-4">
+        <Button variant="ghost" size="sm">LWC Form Generator</Button>
         <ThemeSwitcher />
       </div>
     </header>
