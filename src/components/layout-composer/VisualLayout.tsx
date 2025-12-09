@@ -46,7 +46,7 @@ const sldsPaddingToTailwind: Record<string, string> = {
     'slds-p-vertical_large': 'py-6',
 }
 
-const flexClassMap: Record<Column['flexibility'], string> = {
+const flexClassMap: Record<Row['flexibility'], string> = {
     'default': '', // Uses flex-basis for sizing
     'auto': 'flex-1',
     'shrink': 'flex-shrink',
@@ -89,7 +89,7 @@ export function VisualLayout({
             >
               {row.columns.map((col, index) => {
                 const isSelected = selectedColumnId === col.id;
-                const flexBasis = col.flexibility === 'default' ? `calc(${(col.size / 12) * 100}% - 0.75rem)` : 'auto';
+                const flexBasis = row.flexibility === 'default' ? `calc(${(col.size / 12) * 100}% - 0.75rem)` : 'auto';
 
                 return (
                   <div
@@ -100,14 +100,14 @@ export function VisualLayout({
                       'bg-card border',
                       isSelected ? 'ring-2 ring-primary ring-offset-2 border-primary' : 'border-foreground/50',
                        vAlignClassMap[row.verticalAlignment] === 'items-stretch' ? '' : 'h-20',
-                      flexClassMap[col.flexibility],
+                      flexClassMap[row.flexibility],
                     )}
                     style={{ flexBasis: flexBasis }}
                     onClick={() => onSelectColumn(col.id)}
                   >
                     <div className={cn(
                         "text-center text-foreground w-full h-full flex items-center justify-center rounded-md",
-                        sldsPaddingToTailwind[col.padding] || 'p-2',
+                        sldsPaddingToTailwind[row.padding] || 'p-2',
                         isSelected ? "bg-primary/10" : ""
                     )}>
                       <span className="font-semibold">{index + 1}</span>

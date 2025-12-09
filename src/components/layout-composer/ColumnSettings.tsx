@@ -1,13 +1,6 @@
 'use client';
 
 import type { Column, DeviceSize, Row } from '@/lib/types';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import {
   Select,
@@ -16,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Trash2, HelpCircle, ChevronDown } from 'lucide-react';
+import { Trash2, HelpCircle } from 'lucide-react';
 import { Button } from '../ui/button';
 import {
   Accordion,
@@ -25,106 +18,51 @@ import {
   AccordionTrigger,
 } from '../ui/accordion';
 import { Switch } from '../ui/switch';
+import { cn } from '@/lib/utils';
 
 interface ColumnSettingsProps {
   column: Column;
+  columnIndex: number;
   onUpdate: (column: Column) => void;
   onDelete: (columnId: string) => void;
   row: Row;
-  onUpdateRow: (rowId: string, updatedProps: Partial<Row>) => void;
+  isSelected: boolean;
+  onSelect: () => void;
 }
-
-const paddingOptions = [
-    { value: 'none', label: 'Default' },
-    { value: 'slds-p-horizontal_small', label: 'horizontal-small'},
-    { value: 'slds-p-horizontal_medium', label: 'horizontal-medium'},
-    { value: 'slds-p-horizontal_large', label: 'horizontal-large'},
-    { value: 'slds-p-around_small', label: 'around-small'},
-    { value: 'slds-p-around_medium', label: 'around-medium'},
-    { value: 'slds-p-around_large', label: 'around-large'},
-]
-
-const flexibilityOptions = [
-    { value: 'default', label: 'Default' },
-    { value: 'auto', label: 'auto' },
-    { value: 'shrink', label: 'shrink' },
-    { value: 'no-shrink', label: 'no-shrink' },
-    { value: 'grow', label: 'grow' },
-    { value: 'no-grow', label: 'no-grow' },
-    { value: 'no-flex', label: 'no-flex' },
-]
 
 const sizeOptions = Array.from({ length: 12 }, (_, i) => i + 1);
 
 export function ColumnSettings({
   column,
+  columnIndex,
   onUpdate,
   onDelete,
   row,
-  onUpdateRow,
+  isSelected,
+  onSelect,
 }: ColumnSettingsProps) {
   const handleSizeChange = (device: DeviceSize, value: string) => {
     onUpdate({ ...column, [device]: parseInt(value, 10) });
-  };
-
-  const handlePaddingChange = (value: string) => {
-    onUpdate({ ...column, padding: value });
   };
   
   const handleDeviceSpecificChange = (checked: boolean) => {
     onUpdate({ ...column, deviceSpecific: checked });
   };
 
-  const handleFlexibilityChange = (value: string) => {
-    onUpdate({ ...column, flexibility: value as Column['flexibility'] });
-  };
-
-  const columnIndex = row.columns.findIndex(c => c.id === column.id);
-
-
   return (
     <div className="w-full">
-      <Accordion type="single" collapsible defaultValue="column-0" className="w-full">
-        <AccordionItem value={`column-${columnIndex}`}>
-          <AccordionTrigger className="font-bold text-base w-full justify-between">
+      <Accordion type="single" collapsible value={isSelected ? `column-${columnIndex}` : ''} onValueChange={(value) => { if (value) onSelect()}}>
+        <AccordionItem value={`column-${columnIndex}`} >
+          <AccordionTrigger className={cn("font-bold text-base w-full justify-between hover:no-underline rounded-md px-4", isSelected ? 'bg-primary/10' : '')}>
             <div className="flex items-center">
               Column {columnIndex + 1}
             </div>
           </AccordionTrigger>
-          <AccordionContent className="pt-4 space-y-4">
-            <div className="flex items-center justify-between mb-2 gap-4">
-                <div className="w-1/2">
-                    <Label className="flex items-center gap-1 mb-2 text-xs">Flexibility <HelpCircle className="h-3 w-3 text-muted-foreground" /></Label>
-                    <Select value={column.flexibility} onValueChange={handleFlexibilityChange}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {flexibilityOptions.map(option => (
-                                <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                </div>
-                <div className="w-1/2">
-                    <Label className="flex items-center gap-1 mb-2 text-xs">Padding <HelpCircle className="h-3 w-3 text-muted-foreground" /></Label>
-                    <Select value={column.padding} onValueChange={handlePaddingChange}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select padding" />
-                      </SelectTrigger>
-                      <SelectContent>
-                          {paddingOptions.map(option => (
-                              <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
-                          ))}
-                      </SelectContent>
-                    </Select>
-                </div>
-            </div>
-
-            {column.flexibility === 'default' && (
+          <AccordionContent className="pt-4 px-4 space-y-4 bg-muted/20 rounded-b-md border-x border-b">
+            {row.flexibility === 'default' && (
                 <div className="space-y-2">
                     <div className="flex justify-between items-center mb-2">
-                        <Label htmlFor={`size-${column.id}`} className="text-xs">Size</Label>
+                        <Label htmlFor={`size-${column.id}`} className="text-xs">Default Size</Label>
                         <HelpCircle className="h-3 w-3 text-muted-foreground" />
                     </div>
                     <Select value={String(column.size)} onValueChange={(v) => handleSizeChange('size', v)}>
@@ -132,14 +70,14 @@ export function ColumnSettings({
                             <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                            {sizeOptions.map(s => <SelectItem key={s} value={String(s)}>{s}</SelectItem>)}
+                            {sizeOptions.map(s => <SelectItem key={s} value={String(s)}>{s} of 12</SelectItem>)}
                         </SelectContent>
                     </Select>
                 </div>
             )}
             <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                    <Label className="text-xs">Device Specific</Label>
+                    <Label className="text-xs">Device Specific Sizes</Label>
                 </div>
                 <Switch
                     id={`device-specific-${column.id}`}
@@ -157,7 +95,7 @@ export function ColumnSettings({
                                 <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                                {sizeOptions.map(s => <SelectItem key={s} value={String(s)}>{s}</SelectItem>)}
+                                {sizeOptions.map(s => <SelectItem key={s} value={String(s)}>{s} of 12</SelectItem>)}
                             </SelectContent>
                         </Select>
                     </div>
@@ -168,7 +106,7 @@ export function ColumnSettings({
                                 <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                                {sizeOptions.map(s => <SelectItem key={s} value={String(s)}>{s}</SelectItem>)}
+                                {sizeOptions.map(s => <SelectItem key={s} value={String(s)}>{s} of 12</SelectItem>)}
                             </SelectContent>
                         </Select>
                     </div>

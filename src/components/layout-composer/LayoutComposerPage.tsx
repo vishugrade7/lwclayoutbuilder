@@ -6,11 +6,18 @@ import { createNewColumn } from '@/lib/defaults';
 import { RowSettings } from './RowSettings';
 import { VisualLayout } from './VisualLayout';
 import { ColumnSettings } from './ColumnSettings';
-import { Card, CardContent } from '../ui/card';
 import { Button } from '../ui/button';
 import { Plus, Code } from 'lucide-react';
 import { CodeGenerationDialog } from './CodeGenerationDialog';
-import { Separator } from '@/components/ui/separator';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { HelpCircle } from 'lucide-react';
 
 const createNewRow = (id: string): Row => ({
   id: `row-${id}`,
@@ -19,6 +26,8 @@ const createNewRow = (id: string): Row => ({
   verticalAlignment: 'start',
   pullBoundaries: 'none',
   multipleRows: true,
+  flexibility: 'default',
+  padding: 'none',
 });
 
 const initialRowId = 'initial-row';
@@ -31,18 +40,41 @@ const DEFAULT_LAYOUT: Row[] = [
         size: 12,
         sizeSmall: 12,
         sizeMedium: 12,
-        padding: 'slds-p-around_small',
-        type: 'Default',
         deviceSpecific: false,
-        flexibility: 'default',
       },
     ],
     horizontalAlignment: 'start',
     verticalAlignment: 'start',
     pullBoundaries: 'none',
     multipleRows: false,
+    flexibility: 'default',
+    padding: 'slds-p-around_small',
   },
 ];
+
+const paddingOptions = [
+  { value: 'none', label: 'Default' },
+  { value: 'slds-p-horizontal_small', label: 'Horizontal Small'},
+  { value: 'slds-p-horizontal_medium', label: 'Horizontal Medium'},
+  { value: 'slds-p-horizontal_large', label: 'Horizontal Large'},
+  { value: 'slds-p-around_small', label: 'Around Small'},
+  { value: 'slds-p-around_medium', label: 'Around Medium'},
+  { value: 'slds-p-around_large', label: 'Around Large'},
+  { value: 'slds-p-vertical_small', label: 'Vertical Small'},
+  { value: 'slds-p-vertical_medium', label: 'Vertical Medium'},
+  { value: 'slds-p-vertical_large', label: 'Vertical Large'},
+]
+
+const flexibilityOptions = [
+    { value: 'default', label: 'Default' },
+    { value: 'auto', label: 'Auto' },
+    { value: 'shrink', label: 'Shrink' },
+    { value: 'no-shrink', label: 'No-Shrink' },
+    { value: 'grow', label: 'Grow' },
+    { value: 'no-grow', label: 'No-Grow' },
+    { value: 'no-flex', label: 'No-Flex' },
+]
+
 
 export function LayoutComposerPage() {
   const [rows, setRows] = useState<Row[]>(DEFAULT_LAYOUT);
@@ -119,7 +151,7 @@ export function LayoutComposerPage() {
             } else {
                  setSelectedColumnId(null);
                  if (remainingRows.length === 0) {
-                    const newRow = createNewRow(`row-${baseId}-${rows.length}`);
+                    const newRow = createNewRow(`${baseId}-${rows.length}`);
                     setRows([newRow]);
                     setSelectedColumnId(newRow.columns[0].id);
                  }
@@ -130,29 +162,27 @@ export function LayoutComposerPage() {
   
   const handleAddRow = useCallback(() => {
     startTransition(() => {
-      const newRow = createNewRow(`row-${baseId}-${rows.length}`);
+      const newRow = createNewRow(`${baseId}-${rows.length}`);
       setRows(prevRows => [...prevRows, newRow]);
       setSelectedColumnId(newRow.columns[0].id);
     });
   }, [baseId, rows.length]);
-
-  const selectedColumn = useMemo(() => {
-    if (!selectedColumnId) return null;
-    for (const row of rows) {
-      const found = row.columns.find((c) => c.id === selectedColumnId);
-      if (found) return found;
-    }
-    return null;
-  }, [rows, selectedColumnId]);
   
   const activeRow = useMemo(() => {
     return rows.find(r => r.columns.some(c => c.id === selectedColumnId)) ?? rows[0] ?? null;
   }, [rows, selectedColumnId]);
 
-  const activeColumnRow = useMemo(() => {
-    return rows.find(r => r.columns.some(c => c.id === selectedColumnId));
-  }, [rows, selectedColumnId]);
+  const handleFlexibilityChange = (value: string) => {
+    if (activeRow) {
+      handleUpdateRow(activeRow.id, { flexibility: value as Row['flexibility'] });
+    }
+  };
 
+  const handlePaddingChange = (value: string) => {
+    if (activeRow) {
+      handleUpdateRow(activeRow.id, { padding: value });
+    }
+  };
 
   return (
     <div className="flex h-screen flex-col bg-background font-body text-foreground">
@@ -173,21 +203,60 @@ export function LayoutComposerPage() {
                   <Plus className="mr-2 h-3 w-3" /> Add Column
               </Button>
             </div>
-          {selectedColumn && activeColumnRow ? (
-            <ColumnSettings
-              column={selectedColumn}
-              onUpdate={handleUpdateColumn}
-              onDelete={handleDeleteColumn}
-              row={activeColumnRow}
-              onUpdateRow={handleUpdateRow}
-            />
-          ) : (
-            <div className="flex items-center justify-center h-full">
-              <p className="text-center text-muted-foreground p-4">
-                  Select a column in the visual layout to see its properties.
-              </p>
+            {activeRow && (
+              <div className="space-y-4 mb-4 p-4 bg-muted/50 rounded-lg">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="w-1/2">
+                      <Label className="flex items-center gap-1 mb-2 text-xs">Flexibility <HelpCircle className="h-3 w-3 text-muted-foreground" /></Label>
+                      <Select value={activeRow.flexibility} onValueChange={handleFlexibilityChange}>
+                          <SelectTrigger className="bg-card">
+                            <SelectValue placeholder="Select type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                              {flexibilityOptions.map(option => (
+                                  <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                              ))}
+                          </SelectContent>
+                      </Select>
+                  </div>
+                  <div className="w-1/2">
+                      <Label className="flex items-center gap-1 mb-2 text-xs">Padding <HelpCircle className="h-3 w-3 text-muted-foreground" /></Label>
+                      <Select value={activeRow.padding} onValueChange={handlePaddingChange}>
+                        <SelectTrigger className="bg-card">
+                          <SelectValue placeholder="Select padding" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {paddingOptions.map(option => (
+                                <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                            ))}
+                        </SelectContent>
+                      </Select>
+                  </div>
+                </div>
+              </div>
+            )}
+            <div className="space-y-2">
+              {activeRow ? (
+                activeRow.columns.map((col, index) => (
+                  <ColumnSettings
+                    key={col.id}
+                    column={col}
+                    columnIndex={index}
+                    onUpdate={handleUpdateColumn}
+                    onDelete={handleDeleteColumn}
+                    row={activeRow}
+                    isSelected={selectedColumnId === col.id}
+                    onSelect={() => setSelectedColumnId(col.id)}
+                  />
+                ))
+              ) : (
+                <div className="flex items-center justify-center h-full">
+                  <p className="text-center text-muted-foreground p-4">
+                      Select a row in the visual layout to see its columns.
+                  </p>
+                </div>
+              )}
             </div>
-          )}
         </div>
 
         <div className="col-span-9 p-6 flex flex-col bg-muted/30">
