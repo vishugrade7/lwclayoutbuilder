@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/select';
 import { HelpCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { ThemeSwitcher } from './ThemeSwitcher';
 
 const createNewRow = (id: string): Row => ({
   id: `row-${id}`,
