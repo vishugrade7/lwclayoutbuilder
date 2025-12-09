@@ -85,16 +85,18 @@ export function VisualLayout({
   return (
     <div className="h-full w-full bg-primary/10 p-4 rounded-lg border-2 border-primary/50 relative flex flex-col">
        <div className="flex justify-between items-center absolute -top-9 left-0 right-0 px-4">
-        <div className="bg-primary text-primary-foreground font-bold py-1 px-3 rounded-t-md">
-            {previewDevice.charAt(0).toUpperCase() + previewDevice.slice(1)}
+        <div className="flex items-center gap-4">
+            <div className="bg-primary text-primary-foreground font-bold py-1 px-3 rounded-t-md">
+                {previewDevice.charAt(0).toUpperCase() + previewDevice.slice(1)}
+            </div>
+            <Tabs value={previewDevice} onValueChange={(value) => onSetPreviewDevice(value as PreviewDevice)} className="w-auto">
+              <TabsList>
+                <TabsTrigger value="desktop" className="px-2"><Laptop className="h-4 w-4"/></TabsTrigger>
+                <TabsTrigger value="tablet" className="px-2"><Tablet className="h-4 w-4"/></TabsTrigger>
+                <TabsTrigger value="mobile" className="px-2"><Smartphone className="h-4 w-4"/></TabsTrigger>
+              </TabsList>
+            </Tabs>
         </div>
-        <Tabs value={previewDevice} onValueChange={(value) => onSetPreviewDevice(value as PreviewDevice)} className="w-auto">
-          <TabsList>
-            <TabsTrigger value="desktop" className="px-2"><Laptop className="h-4 w-4"/></TabsTrigger>
-            <TabsTrigger value="tablet" className="px-2"><Tablet className="h-4 w-4"/></TabsTrigger>
-            <TabsTrigger value="mobile" className="px-2"><Smartphone className="h-4 w-4"/></TabsTrigger>
-          </TabsList>
-        </Tabs>
       </div>
 
       {isLoading && (
@@ -121,11 +123,12 @@ export function VisualLayout({
               <div
                   key={row.id}
                   className={cn(
-                      'flex w-full min-h-[5rem]',
+                      'flex w-full min-h-[5rem] bg-card',
                       row.multipleRows ? 'flex-wrap' : 'flex-nowrap',
                       hAlignClassMap[row.horizontalAlignment],
                       vAlignClassMap[row.verticalAlignment],
-                      pullBoundariesClassMap[row.pullBoundaries]
+                      pullBoundariesClassMap[row.pullBoundaries],
+                      sldsPaddingToTailwind[row.padding] || ''
                   )}
                   style={{ gap: '0.75rem' }}
                   >
@@ -145,10 +148,8 @@ export function VisualLayout({
                           className={cn(
                           'flex items-center justify-center rounded-md text-sm transition-all duration-200 ease-in-out',
                           'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
-                          'bg-card border',
                           isSelected ? 'ring-2 ring-primary ring-offset-2 border-primary' : 'border-foreground/20',
-                          vAlignClassMap[row.verticalAlignment] === 'items-stretch' ? '' : 'h-20',
-                          sldsPaddingToTailwind[row.padding] || ''
+                          vAlignClassMap[row.verticalAlignment] === 'items-stretch' ? '' : 'h-20'
                           )}
                           style={style}
                           onClick={() => onSelectColumn(col.id)}
