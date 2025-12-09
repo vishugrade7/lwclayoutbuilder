@@ -34,7 +34,7 @@ const pullBoundariesClassMap: Record<string, string> = {
 }
 
 const sldsPaddingToTailwind: Record<string, string> = {
-    'none': '',
+    'none': 'p-2',
     'slds-p-around_small': 'p-2',
     'slds-p-around_medium': 'p-4',
     'slds-p-around_large': 'p-6',
@@ -84,9 +84,19 @@ export function VisualLayout({
             >
               {row.columns.map((col, index) => {
                 const isSelected = selectedColumnId === col.id;
-                const flexBasis = row.flexibility === 'default' 
-                    ? `calc(${(col.size / 12) * 100}% - ${col.size === 12 ? '0px' : '0.75rem'})` 
-                    : undefined;
+                
+                const widthPercentage = (col.size / 12) * 100;
+                
+                const style: React.CSSProperties = {};
+
+                if (row.flexibility === 'default') {
+                  style.flex = `0 0 calc(${widthPercentage}% - ${widthPercentage === 100 ? '0px' : '0.5rem'})`;
+                  style.maxWidth = `${widthPercentage}%`;
+                } else {
+                  style.flexGrow = 1;
+                  style.flexShrink = 1;
+                  style.flexBasis = 0;
+                }
                 
                 return (
                   <div
@@ -99,11 +109,7 @@ export function VisualLayout({
                        vAlignClassMap[row.verticalAlignment] === 'items-stretch' ? '' : 'h-20',
                       flexClassMap[row.flexibility],
                     )}
-                    style={{ 
-                      flexBasis: flexBasis, 
-                      flexGrow: row.flexibility === 'fluid' ? 1 : 0,
-                      flexShrink: row.flexibility === 'fluid' ? 1 : 0,
-                     }}
+                    style={style}
                     onClick={() => onSelectColumn(col.id)}
                   >
                     <div className={cn(
