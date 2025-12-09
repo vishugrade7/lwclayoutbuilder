@@ -267,7 +267,7 @@ export function LayoutComposerPage() {
 
         <div className="col-span-12 lg:col-span-9 p-6 flex flex-col bg-background/50">
           <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-4 gap-4">
-            <h2 className="text-lg font-bold sm:absolute sm:left-1/2 sm:-translate-x-1/2">Visual Layout</h2>
+            <div />
             <div className="flex items-center gap-4 sm:ml-auto">
               <Button size="sm" onClick={handleAddRow} className="rounded-full">
                 <Plus className="mr-2 h-3 w-3" /> Add Row
@@ -298,5 +298,3 @@ export function LayoutComposerPage() {
     </div>
   );
 }
-
-    

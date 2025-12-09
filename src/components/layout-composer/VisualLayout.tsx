@@ -96,6 +96,7 @@ export function VisualLayout({
                 <TabsTrigger value="mobile" className="px-2"><Smartphone className="h-4 w-4"/></TabsTrigger>
               </TabsList>
             </Tabs>
+            <h2 className="text-lg font-bold">Visual Layout</h2>
         </div>
       </div>
 
