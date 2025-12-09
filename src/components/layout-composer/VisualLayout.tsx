@@ -67,64 +67,78 @@ export function VisualLayout({
       )}
       <div
         className={cn(
-          "h-full w-full rounded-md bg-card p-4 space-y-2 overflow-auto border-2 border-border",
+          "h-full w-full rounded-md bg-card p-4 space-y-2 overflow-auto border-2 border-border relative",
           isLoading ? 'opacity-50' : 'opacity-100'
         )}
       >
-        {rows.map((row) => (
-          <div key={row.id} className={cn(pullBoundariesClassMap[row.pullBoundaries])}>
-            <div
-              className={cn(
-                'flex min-h-[100px]',
-                row.multipleRows && 'flex-wrap',
-                hAlignClassMap[row.horizontalAlignment],
-                vAlignClassMap[row.verticalAlignment]
-              )}
-              style={{ gap: '0.75rem' }}
-            >
-              {row.columns.map((col, index) => {
-                const isSelected = selectedColumnId === col.id;
-                
-                const widthPercentage = (col.size / 12) * 100;
-                
-                const style: React.CSSProperties = {};
+        <div className="absolute inset-0 grid grid-cols-12 gap-x-2 px-4 pointer-events-none">
+            {Array.from({ length: 12 }).map((_, i) => (
+                <div key={i} className="border-l border-r border-dashed border-border/50"></div>
+            ))}
+        </div>
 
-                if (row.flexibility === 'default') {
-                  style.flex = `0 0 calc(${widthPercentage}% - ${widthPercentage === 100 ? '0px' : '0.5rem'})`;
-                  style.maxWidth = `${widthPercentage}%`;
-                } else {
-                  style.flexGrow = 1;
-                  style.flexShrink = 1;
-                  style.flexBasis = 0;
-                }
-                
-                return (
-                  <div
-                    key={col.id}
-                    className={cn(
-                      'flex items-center justify-center rounded-md text-sm transition-all duration-200 ease-in-out',
-                      'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
-                      'bg-card border',
-                      isSelected ? 'ring-2 ring-primary ring-offset-2 border-primary' : 'border-foreground/50',
-                       vAlignClassMap[row.verticalAlignment] === 'items-stretch' ? '' : 'h-20',
-                      flexClassMap[row.flexibility],
-                    )}
-                    style={style}
-                    onClick={() => onSelectColumn(col.id)}
-                  >
-                    <div className={cn(
-                        "text-center text-foreground w-full h-full flex items-center justify-center rounded-md",
-                        sldsPaddingToTailwind[row.padding] || 'p-2',
-                        isSelected ? "bg-primary/10" : ""
-                    )}>
-                      <span className="font-semibold">{index + 1}</span>
+        <div className='relative'>
+            {rows.map((row) => (
+            <div key={row.id} className={cn(pullBoundariesClassMap[row.pullBoundaries])}>
+                <div
+                className={cn(
+                    'flex min-h-[100px]',
+                    row.multipleRows && 'flex-wrap',
+                    hAlignClassMap[row.horizontalAlignment],
+                    vAlignClassMap[row.verticalAlignment]
+                )}
+                style={{ gap: '0.75rem' }}
+                >
+                {row.columns.map((col, index) => {
+                    const isSelected = selectedColumnId === col.id;
+                    
+                    const widthPercentage = (col.size / 12) * 100;
+                    
+                    const style: React.CSSProperties = {};
+
+                    if (row.flexibility === 'default') {
+                        if (row.multipleRows) {
+                            style.flexBasis = `calc(${widthPercentage}% - ${widthPercentage === 100 ? '0px' : '0.75rem'})`;
+                            style.flexGrow = 0;
+                            style.flexShrink = 0;
+                            style.maxWidth = `${widthPercentage}%`;
+                        } else {
+                            style.flex = `0 1 ${widthPercentage}%`;
+                        }
+                    } else {
+                        style.flexGrow = 1;
+                        style.flexShrink = 1;
+                        style.flexBasis = 0;
+                    }
+                    
+                    return (
+                    <div
+                        key={col.id}
+                        className={cn(
+                        'flex items-center justify-center rounded-md text-sm transition-all duration-200 ease-in-out',
+                        'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
+                        'bg-card border',
+                        isSelected ? 'ring-2 ring-primary ring-offset-2 border-primary' : 'border-foreground/50',
+                        vAlignClassMap[row.verticalAlignment] === 'items-stretch' ? '' : 'h-20',
+                        flexClassMap[row.flexibility],
+                        )}
+                        style={style}
+                        onClick={() => onSelectColumn(col.id)}
+                    >
+                        <div className={cn(
+                            "text-center text-foreground w-full h-full flex items-center justify-center rounded-md",
+                            sldsPaddingToTailwind[row.padding] || 'p-2',
+                            isSelected ? "bg-primary/10" : ""
+                        )}>
+                        <span className="font-semibold">{index + 1}</span>
+                        </div>
                     </div>
-                  </div>
-                )
-              })}
+                    )
+                })}
+                </div>
             </div>
-          </div>
-        ))}
+            ))}
+        </div>
       </div>
     </div>
   );
