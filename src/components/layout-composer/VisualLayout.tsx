@@ -83,7 +83,7 @@ export function VisualLayout({
   };
 
   return (
-    <div className="h-full w-full p-4 rounded-lg border-2 border-border/20 relative flex flex-col">
+    <div className="h-full w-full p-4 rounded-lg border-2 border-border/20 relative flex flex-col mt-12">
        <div className="flex justify-between items-center absolute -top-10 left-0 right-0 px-1">
         <div className="flex items-center gap-4">
             <div className="bg-muted text-muted-foreground font-bold py-1 px-3 rounded-t-md text-sm">
@@ -149,7 +149,7 @@ export function VisualLayout({
                           className={cn(
                           'flex items-center justify-center rounded-md text-sm transition-all duration-200 ease-in-out',
                           'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
-                          isSelected ? 'ring-2 ring-primary ring-offset-2 border-primary' : 'border-foreground/20',
+                          isSelected ? 'ring-2 ring-offset-2' : 'border-foreground/20',
                           vAlignClassMap[row.verticalAlignment] === 'items-stretch' ? '' : 'h-20'
                           )}
                           style={style}
@@ -157,7 +157,7 @@ export function VisualLayout({
                       >
                           <div className={cn(
                               "text-center text-foreground w-full h-full flex items-center justify-center rounded-md",
-                              isSelected ? "bg-primary/10" : "bg-muted/50"
+                              isSelected ? "" : "bg-muted/50"
                           )}>
                           <span className="font-semibold">{index + 1}</span>
                           </div>
