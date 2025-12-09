@@ -83,10 +83,10 @@ export function VisualLayout({
   };
 
   return (
-    <div className="h-full w-full bg-primary/10 p-4 rounded-lg border-2 border-primary/50 relative flex flex-col">
-       <div className="flex justify-between items-center absolute -top-9 left-0 right-0 px-4">
+    <div className="h-full w-full p-4 rounded-lg border-2 border-border/20 relative flex flex-col">
+       <div className="flex justify-between items-center absolute -top-10 left-0 right-0 px-1">
         <div className="flex items-center gap-4">
-            <div className="bg-primary text-primary-foreground font-bold py-1 px-3 rounded-t-md">
+            <div className="bg-muted text-muted-foreground font-bold py-1 px-3 rounded-t-md text-sm">
                 {previewDevice.charAt(0).toUpperCase() + previewDevice.slice(1)}
             </div>
             <Tabs value={previewDevice} onValueChange={(value) => onSetPreviewDevice(value as PreviewDevice)} className="w-auto">
@@ -115,7 +115,7 @@ export function VisualLayout({
         >
           <div className="absolute inset-0 grid grid-cols-12 gap-x-2 px-4 pointer-events-none">
               {Array.from({ length: 12 }).map((_, i) => (
-                  <div key={i} className="border-l border-r border-dashed border-border/30"></div>
+                  <div key={i} className="border-l border-r border-dashed border-border/20"></div>
               ))}
           </div>
 
@@ -157,7 +157,7 @@ export function VisualLayout({
                       >
                           <div className={cn(
                               "text-center text-foreground w-full h-full flex items-center justify-center rounded-md",
-                              isSelected ? "bg-primary/10" : "bg-primary/5"
+                              isSelected ? "bg-primary/10" : "bg-muted/50"
                           )}>
                           <span className="font-semibold">{index + 1}</span>
                           </div>
