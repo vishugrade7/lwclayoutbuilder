@@ -5,10 +5,8 @@ import type { Row, Column } from '@/lib/types';
 import { DEFAULT_LAYOUT, createNewColumn } from '@/lib/defaults';
 import { Header } from './Header';
 import { RowSettings } from './RowSettings';
-import { AiSuggestions } from './AiSuggestions';
 import { VisualLayout } from './VisualLayout';
 import { ColumnSettings } from './ColumnSettings';
-import { CodePreview } from './CodePreview';
 import { generateId } from '@/lib/utils';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 
@@ -71,9 +69,19 @@ export function LayoutComposerPage() {
             return { ...row, columns: newColumns };
           }).filter(row => row.columns.length > 0)
         );
-        setSelectedColumnId(newSelectedId);
+        if (newSelectedId) {
+            setSelectedColumnId(newSelectedId);
+        } else {
+            // if no column is left, select first column of first row
+            const firstRow = rows[0];
+            if (firstRow && firstRow.columns.length > 0) {
+                setSelectedColumnId(firstRow.columns[0].id);
+            } else {
+                setSelectedColumnId(null);
+            }
+        }
     });
-  }, [selectedColumnId]);
+  }, [selectedColumnId, rows]);
   
   const handleAddRow = useCallback(() => {
     startTransition(() => {
@@ -117,7 +125,6 @@ export function LayoutComposerPage() {
                 onAddRow={handleAddRow}
               />
             )}
-            <AiSuggestions />
           </div>
 
           {/* Center Panel */}
@@ -140,19 +147,18 @@ export function LayoutComposerPage() {
                 onDelete={handleDeleteColumn}
               />
             ) : (
-              <Card className="h-1/2">
+              <Card>
                 <CardHeader>
                     <CardTitle className="font-headline">Column Settings</CardTitle>
                     <CardDescription>No column selected</CardDescription>
                 </CardHeader>
-                <CardContent className="flex items-center justify-center h-2/3">
+                <CardContent className="flex items-center justify-center h-48">
                     <p className="text-center text-muted-foreground">
                         Select a column in the visual layout to see its properties.
                     </p>
                 </CardContent>
               </Card>
             )}
-            <CodePreview rows={rows} />
           </div>
         </div>
       </main>

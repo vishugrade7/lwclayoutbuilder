@@ -1,4 +1,5 @@
 import { Zap } from 'lucide-react';
+import { ThemeSwitcher } from './ThemeSwitcher';
 
 export function Header() {
   return (
@@ -11,6 +12,7 @@ export function Header() {
           Lightning Layout Composer
         </h1>
       </div>
+      <ThemeSwitcher />
     </header>
   );
 }
