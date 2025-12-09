@@ -2,6 +2,7 @@
 
 import { Button } from './ui/button';
 import { ThemeSwitcher } from './layout-composer/ThemeSwitcher';
+import { FileCode } from 'lucide-react';
 
 export function Header() {
 
@@ -13,7 +14,10 @@ export function Header() {
         </h1>
       </div>
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="sm">LWC Form Generator</Button>
+        <Button variant="ghost" size="sm">
+          <FileCode className="h-4 w-4 mr-2" />
+          LWC Form Generator
+        </Button>
         <ThemeSwitcher />
       </div>
     </header>
