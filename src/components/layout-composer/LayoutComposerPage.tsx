@@ -164,7 +164,7 @@ export function LayoutComposerPage() {
       setRows(prevRows => [...prevRows, newRow]);
       setSelectedColumnId(newRow.columns[0].id);
     });
-  }, [baseId, rows.length]);
+  }, [baseId, rows]);
   
   const activeRow = useMemo(() => {
     return rows.find(r => r.columns.some(c => c.id === selectedColumnId)) ?? rows[0] ?? null;
@@ -189,7 +189,7 @@ export function LayoutComposerPage() {
           <h1 className="text-xl font-bold font-headline text-foreground whitespace-nowrap">Layout Composer</h1>
           <ThemeSwitcher/>
         </div>
-        <div className="hidden md:flex">
+        <div className="flex justify-end">
           {activeRow && (
             <RowSettings 
               row={activeRow} 
