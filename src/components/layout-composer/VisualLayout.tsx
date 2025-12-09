@@ -47,13 +47,8 @@ const sldsPaddingToTailwind: Record<string, string> = {
 }
 
 const flexClassMap: Record<Row['flexibility'], string> = {
-    'default': '', // Uses flex-basis for sizing
-    'auto': 'flex-1',
-    'shrink': 'flex-shrink',
-    'no-shrink': 'flex-shrink-0',
-    'grow': 'flex-grow',
-    'no-grow': 'flex-grow-0',
-    'no-flex': 'flex-none'
+    'default': '', 
+    'fluid': 'flex-1',
 };
 
 export function VisualLayout({

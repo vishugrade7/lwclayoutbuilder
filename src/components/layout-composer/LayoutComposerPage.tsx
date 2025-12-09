@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { HelpCircle } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const createNewRow = (id: string): Row => ({
   id: `row-${id}`,
@@ -67,12 +68,7 @@ const paddingOptions = [
 
 const columnTypeOptions = [
     { value: 'default', label: 'Fixed' },
-    { value: 'auto', label: 'Auto' },
-    { value: 'shrink', label: 'Shrink' },
-    { value: 'no-shrink', label: 'No-Shrink' },
-    { value: 'grow', label: 'Grow' },
-    { value: 'no-grow', label: 'No-Grow' },
-    { value: 'no-flex', label: 'No-Flex' },
+    { value: 'fluid', label: 'Fluid' },
 ]
 
 
@@ -187,6 +183,10 @@ export function LayoutComposerPage() {
   return (
     <div className="flex h-screen flex-col bg-background font-body text-foreground">
        <header className="px-6 py-3 bg-card border-b flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <h1 className="text-xl font-bold font-headline text-foreground whitespace-nowrap">Layout Composer</h1>
+          <ThemeSwitcher/>
+        </div>
         {activeRow && (
           <RowSettings 
             row={activeRow} 
@@ -199,7 +199,7 @@ export function LayoutComposerPage() {
         <div className="col-span-3 bg-card p-4 border-r overflow-y-auto">
            <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-bold">Column Config</h2>
-              <Button variant="secondary" size="sm" onClick={() => activeRow && handleAddColumn(activeRow.id)}>
+              <Button variant="secondary" size="sm" onClick={() => activeRow && handleAddColumn(activeRow.id)} className="rounded-full">
                   <Plus className="mr-2 h-3 w-3" /> Add Column
               </Button>
             </div>
@@ -209,7 +209,7 @@ export function LayoutComposerPage() {
                   <div className="w-1/2">
                       <Label className="flex items-center gap-1 mb-2 text-xs">Column type <HelpCircle className="h-3 w-3 text-muted-foreground" /></Label>
                       <Select value={activeRow.flexibility} onValueChange={handleColumnTypeChange}>
-                          <SelectTrigger className="bg-card">
+                          <SelectTrigger className={cn("bg-card rounded-full")}>
                             <SelectValue placeholder="Select type" />
                           </SelectTrigger>
                           <SelectContent>
@@ -222,7 +222,7 @@ export function LayoutComposerPage() {
                   <div className="w-1/2">
                       <Label className="flex items-center gap-1 mb-2 text-xs">Padding <HelpCircle className="h-3 w-3 text-muted-foreground" /></Label>
                       <Select value={activeRow.padding} onValueChange={handlePaddingChange}>
-                        <SelectTrigger className="bg-card">
+                        <SelectTrigger className={cn("bg-card rounded-full")}>
                           <SelectValue placeholder="Select padding" />
                         </SelectTrigger>
                         <SelectContent>
@@ -263,10 +263,10 @@ export function LayoutComposerPage() {
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-bold">Visual Layout</h2>
             <div className="flex items-center gap-4">
-              <Button size="sm" onClick={handleAddRow}>
+              <Button size="sm" onClick={handleAddRow} className="rounded-full">
                 <Plus className="mr-2 h-3 w-3" /> Add Row
               </Button>
-              <Button size="sm" onClick={() => setCodeDialogOpen(true)}>
+              <Button size="sm" onClick={() => setCodeDialogOpen(true)} className="rounded-full">
                 <Code className="mr-2 h-3 w-3" />
                 Generate Code
               </Button>

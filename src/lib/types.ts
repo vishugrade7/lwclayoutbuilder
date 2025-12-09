@@ -20,6 +20,6 @@ export interface Row {
   verticalAlignment: 'start' | 'center' | 'end' | 'stretch';
   pullBoundaries: 'none' | 'small' | 'medium' | 'large';
   multipleRows: boolean;
-  flexibility: 'default' | 'auto' | 'shrink' | 'no-shrink' | 'grow' | 'no-grow' | 'no-flex';
+  flexibility: 'default' | 'fluid';
   padding: string;
 }
