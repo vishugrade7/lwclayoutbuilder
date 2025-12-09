@@ -43,14 +43,13 @@ const DEFAULT_LAYOUT: Row[] = [
         sizeSmall: 12,
         sizeMedium: 12,
         deviceSpecific: false,
-        flexibility: 'grow'
       },
     ],
     horizontalAlignment: 'start',
     verticalAlignment: 'start',
     pullBoundaries: 'none',
     multipleRows: false,
-    columnType: 'grow',
+    columnType: 'fixed',
     padding: 'slds-p-around_small',
   },
 ];
@@ -69,9 +68,9 @@ const paddingOptions = [
 ]
 
 const columnTypeOptions = [
-    { value: 'fixed', label: 'Fixed' },
-    { value: 'auto', label: 'Auto' },
-    { value: 'grow', label: 'Grow' },
+  { value: 'fixed', label: 'Fixed' },
+  { value: 'auto', label: 'Auto' },
+  { value: 'grow', label: 'Grow' },
 ]
 
 
@@ -184,7 +183,7 @@ export function LayoutComposerPage() {
   };
 
   return (
-    <div className="flex h-screen flex-col bg-transparent font-body text-foreground">
+    <div className="flex h-screen flex-col bg-background font-body text-foreground">
        <header className="px-6 py-3 bg-background/80 border-b backdrop-blur-sm sticky top-0 z-10 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <h1 className="text-xl font-bold font-headline text-foreground whitespace-nowrap">Layout Composer</h1>
@@ -199,7 +198,7 @@ export function LayoutComposerPage() {
       </header>
       
       <main className="flex-grow grid grid-cols-12 gap-0 overflow-hidden">
-        <div className="col-span-3 bg-card/80 p-4 border-r overflow-y-auto">
+        <div className="col-span-3 bg-card/50 p-4 border-r overflow-y-auto">
            <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-bold">Column Config</h2>
               <Button variant="secondary" size="sm" onClick={() => activeRow && handleAddColumn(activeRow.id)} className="rounded-full">
@@ -262,7 +261,7 @@ export function LayoutComposerPage() {
             </div>
         </div>
 
-        <div className="col-span-9 p-6 flex flex-col bg-background/30">
+        <div className="col-span-9 p-6 flex flex-col bg-background/50">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-bold">Visual Layout</h2>
             <div className="flex items-center gap-4">
