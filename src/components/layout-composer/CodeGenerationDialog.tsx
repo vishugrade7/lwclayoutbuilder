@@ -76,24 +76,24 @@ export function CodeGenerationDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl">
-        <DialogHeader>
+      <DialogContent className="max-w-3xl">
+        <DialogHeader className="text-left">
           <DialogTitle>Generated LWC Code</DialogTitle>
           <DialogDescription>
             Copy the generated HTML markup for your Lightning Web Component.
           </DialogDescription>
         </DialogHeader>
         <div className="relative my-4">
-            <SyntaxHighlighter language="html" style={vscDarkPlus} customStyle={{ borderRadius: '0.5rem', margin: 0 }}>
+            <SyntaxHighlighter language="html" style={vscDarkPlus} customStyle={{ borderRadius: '0.5rem', margin: 0, background: '#1E1E1E' }} >
                 {generatedCode}
             </SyntaxHighlighter>
             <Button
                 size="icon"
                 variant="ghost"
-                className="absolute top-2 right-2 h-8 w-8"
+                className="absolute top-2 right-2 h-8 w-8 bg-gray-700/50 hover:bg-gray-600/50"
                 onClick={handleCopy}
             >
-                {hasCopied ? <Check className="h-4 w-4 text-green-500" /> : <Clipboard className="h-4 w-4" />}
+                {hasCopied ? <Check className="h-4 w-4 text-green-400" /> : <Clipboard className="h-4 w-4 text-white" />}
             </Button>
         </div>
         <DialogFooter>
