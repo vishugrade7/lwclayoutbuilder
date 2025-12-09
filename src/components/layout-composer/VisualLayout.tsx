@@ -82,8 +82,8 @@ export function VisualLayout({
             <div key={row.id} className={cn(pullBoundariesClassMap[row.pullBoundaries])}>
                 <div
                 className={cn(
-                    'flex min-h-[100px]',
-                    row.multipleRows && 'flex-wrap',
+                    'flex',
+                    row.multipleRows ? 'flex-wrap' : 'flex-nowrap',
                     hAlignClassMap[row.horizontalAlignment],
                     vAlignClassMap[row.verticalAlignment]
                 )}
@@ -98,12 +98,10 @@ export function VisualLayout({
 
                     if (row.flexibility === 'default') {
                         if (row.multipleRows) {
-                            style.flexBasis = `calc(${widthPercentage}% - (${widthPercentage === 100 ? '0px' : '0.75rem'} * (12 - ${col.size}) / 12))`;
-                            style.flexGrow = 0;
-                            style.flexShrink = 0;
-                            style.width = `${widthPercentage}%`;
+                           style.flex = `0 0 calc(${widthPercentage}% - ${(12 - col.size) * (1 / 12) * 0.75}rem)`;
+                           style.width = `${widthPercentage}%`;
                         } else {
-                             style.flex = `0 1 ${widthPercentage}%`;
+                           style.flex = `0 1 ${widthPercentage}%`;
                         }
                     } else {
                         style.flexGrow = 1;
