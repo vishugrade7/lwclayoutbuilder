@@ -3,9 +3,9 @@
 import { Button } from './ui/button';
 import { ThemeSwitcher } from './layout-composer/ThemeSwitcher';
 import { FileCode, LayoutGrid } from 'lucide-react';
+import Link from 'next/link';
 
 export function Header() {
-
   return (
     <header className="px-4 sm:px-6 py-3 bg-card/80 border-b backdrop-blur-sm sticky top-0 z-10 flex items-center justify-between gap-4">
       <div className="flex items-center gap-4">
@@ -18,10 +18,16 @@ export function Header() {
           <LayoutGrid className="h-4 w-4 mr-2" />
           LWC icons
         </Button>
-        <Button variant="ghost" size="sm">
-          <FileCode className="h-4 w-4 mr-2" />
-          LWC Form Generator
-        </Button>
+        <Link
+          href="https://lwcformbuilder.codbbit.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Button variant="ghost" size="sm">
+            <FileCode className="h-4 w-4 mr-2" />
+            LWC Form Builder
+          </Button>
+        </Link>
         <ThemeSwitcher />
       </div>
     </header>
