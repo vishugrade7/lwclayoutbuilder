@@ -183,7 +183,7 @@ export function LayoutComposerPage() {
 
   return (
     <div className="flex h-full flex-col bg-background font-body text-foreground bg-cover bg-center" style={{ backgroundImage: "url('/background.png')" }}>
-       <div className="px-4 sm:px-6 py-3 bg-card/80 border-b backdrop-blur-sm sticky top-0 z-10 flex items-center justify-between gap-4">
+       <div className="px-4 sm:px-6 py-3 bg-card/80 border-b backdrop-blur-sm sticky top-0 z-10 flex items-center justify-end gap-4">
         <div className="flex items-center gap-4">
           {activeRow && (
             <RowSettings 
@@ -191,9 +191,7 @@ export function LayoutComposerPage() {
               onUpdate={handleUpdateRow}
             />
           )}
-        </div>
-        <div className="flex items-center gap-4 sm:ml-auto">
-            <Button size="sm" onClick={handleAddRow} className="rounded-full">
+           <Button size="sm" onClick={handleAddRow} className="rounded-full">
             <Plus className="mr-2 h-3 w-3" /> Add Row
             </Button>
         </div>
