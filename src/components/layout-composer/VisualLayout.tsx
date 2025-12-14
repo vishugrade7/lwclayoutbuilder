@@ -101,9 +101,13 @@ export function VisualLayout({
             </Tabs>
             <h2 className="text-lg font-bold">Visual Layout</h2>
         </div>
-        <Button size="sm" onClick={onGenerateCode} className="rounded-full">
-            <Code className="mr-2 h-3 w-3" />
-            Generate Code
+        <Button
+          size="sm"
+          onClick={onGenerateCode}
+          className="rounded-full bg-gradient-to-r from-green-400 via-emerald-500 to-teal-600 text-white animate-gradient"
+        >
+          <Code className="mr-2 h-3 w-3" />
+          Generate Code
         </Button>
       </div>
 
