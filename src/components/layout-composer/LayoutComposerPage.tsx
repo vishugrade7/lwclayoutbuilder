@@ -211,7 +211,7 @@ export function LayoutComposerPage() {
                   <div className="w-1/2">
                       <Label className="flex items-center gap-1 mb-2 text-xs">Column type <HelpCircle className="h-3 w-3 text-muted-foreground" /></Label>
                       <Select value={activeRow.columnType} onValueChange={handleColumnTypeChange}>
-                          <SelectTrigger className={cn("bg-card rounded-full")}>
+                          <SelectTrigger className={cn("bg-card")}>
                             <SelectValue placeholder="Select type" />
                           </SelectTrigger>
                           <SelectContent>
@@ -224,7 +224,7 @@ export function LayoutComposerPage() {
                   <div className="w-1/2">
                       <Label className="flex items-center gap-1 mb-2 text-xs">Padding <HelpCircle className="h-3 w-3 text-muted-foreground" /></Label>
                       <Select value={activeRow.padding} onValueChange={handlePaddingChange}>
-                        <SelectTrigger className={cn("bg-card rounded-full")}>
+                        <SelectTrigger className={cn("bg-card")}>
                           <SelectValue placeholder="Select padding" />
                         </SelectTrigger>
                         <SelectContent>
