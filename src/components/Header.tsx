@@ -2,7 +2,7 @@
 
 import { Button } from './ui/button';
 import { ThemeSwitcher } from './layout-composer/ThemeSwitcher';
-import { FileCode, LayoutGrid } from 'lucide-react';
+import { FileCode } from 'lucide-react';
 import Link from 'next/link';
 
 export function Header() {
@@ -14,10 +14,6 @@ export function Header() {
         </h1>
       </div>
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="sm">
-          <LayoutGrid className="h-4 w-4 mr-2" />
-          LWC icons
-        </Button>
         <Link
           href="https://lwcformbuilder.codbbit.com/"
           target="_blank"
