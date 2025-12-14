@@ -2,8 +2,9 @@
 
 import type { Row } from '@/lib/types';
 import { cn } from '@/lib/utils';
-import { Laptop, Loader2, Smartphone, Tablet } from 'lucide-react';
+import { Code, Laptop, Loader2, Smartphone, Tablet } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '../ui/button';
 
 type PreviewDevice = "desktop" | "tablet" | "mobile";
 
@@ -14,6 +15,7 @@ interface VisualLayoutProps {
   isLoading: boolean;
   previewDevice: PreviewDevice;
   onSetPreviewDevice: (device: PreviewDevice) => void;
+  onGenerateCode: () => void;
 }
 
 const hAlignClassMap: Record<Row['horizontalAlignment'], string> = {
@@ -64,6 +66,7 @@ export function VisualLayout({
   isLoading,
   previewDevice,
   onSetPreviewDevice,
+  onGenerateCode,
 }: VisualLayoutProps) {
   
   const getColumnWidth = (col: Row['columns'][0], row: Row) => {
@@ -98,6 +101,10 @@ export function VisualLayout({
             </Tabs>
             <h2 className="text-lg font-bold">Visual Layout</h2>
         </div>
+        <Button size="sm" onClick={onGenerateCode} className="rounded-full">
+            <Code className="mr-2 h-3 w-3" />
+            Generate Code
+        </Button>
       </div>
 
       {isLoading && (

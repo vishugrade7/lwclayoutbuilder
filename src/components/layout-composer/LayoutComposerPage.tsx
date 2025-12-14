@@ -7,7 +7,7 @@ import { RowSettings } from './RowSettings';
 import { VisualLayout } from './VisualLayout';
 import { ColumnSettings } from './ColumnSettings';
 import { Button } from '../ui/button';
-import { Plus, Code } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { CodeGenerationDialog } from './CodeGenerationDialog';
 import { Label } from '@/components/ui/label';
 import {
@@ -196,10 +196,6 @@ export function LayoutComposerPage() {
             <Button size="sm" onClick={handleAddRow} className="rounded-full">
             <Plus className="mr-2 h-3 w-3" /> Add Row
             </Button>
-            <Button size="sm" onClick={() => setCodeDialogOpen(true)} className="rounded-full">
-            <Code className="mr-2 h-3 w-3" />
-            Generate Code
-            </Button>
         </div>
       </div>
       
@@ -276,6 +272,7 @@ export function LayoutComposerPage() {
               isLoading={isPending}
               previewDevice={previewDevice}
               onSetPreviewDevice={setPreviewDevice}
+              onGenerateCode={() => setCodeDialogOpen(true)}
             />
           </div>
         </div>
